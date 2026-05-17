@@ -45,6 +45,18 @@ button {
     padding: 0;
     cursor: pointer;
 }
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 4px;
+}
 </style>
   </head>
 <div class="box">
@@ -104,11 +116,28 @@ setInterval(updateTime, 1000);
     <a href="search">Search</a><br>
   </body>
     <div class="container">
-    <textarea id="message" placeholder="请输入要发送的内容"></textarea>
+    <input id="name" type="text" placeholder="请输入姓名">
+    <select id="shenfen" onchange="handleSelect()">
+        <option value="">— 请选择 —</option>
+        <option value="匿名用户">匿名用户</option>
+    </select>
+      <textarea id="message" placeholder="请输入要发送的内容"></textarea>
     <br>
     <button onclick="sendMail()">发送</button>
     <p id="status"></p>
 </div>
+<script>
+function handleSelect() {
+    const select = document.getElementById('shenfen');
+    const input = document.getElementById('name');
+
+    if (select.value === "匿名用户") {
+        input.value = "匿名用户";
+    } else {
+        input.value = "";
+    }
+}
+</script>
 
 <!-- EmailJS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -133,7 +162,8 @@ function sendMail() {
         {
             content: message,
             time: new Date().toLocaleString('zh-CN'),
-            page_url: window.location.href
+            page_url: window.location.href,
+            name: name
         }
     ).then(() => {
         status.innerText = "✅ 发送成功";
