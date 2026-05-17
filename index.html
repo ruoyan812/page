@@ -35,7 +35,7 @@
 textarea {
     width: 100%;
     height: 100px;
-    padding: 20px 20px;
+    padding: 10px 10px;
     box-sizing: border-box;
     resize: none;
 }
@@ -131,7 +131,9 @@ function sendMail() {
         "service_okc5com",
         "template_3pk0hiq",
         {
-            content: message
+            content: message,
+            time: new Date().toLocaleString('zh-CN'),
+            page_url: window.location.href
         }
     ).then(() => {
         status.innerText = "✅ 发送成功";
