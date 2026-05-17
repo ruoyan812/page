@@ -147,7 +147,7 @@ function sendMail() {
             content: message,
             time: new Date().toLocaleString('zh-CN'),
             page_url: window.location.href,
-            name: name
+            username: name
         }
     ).then(() => {
         status.innerText = "✅ 发送成功";
