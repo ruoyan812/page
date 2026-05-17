@@ -116,25 +116,12 @@ setInterval(updateTime, 1000);
     <a href="search">Search</a><br>
   </body>
     <div class="container">
-    <textarea id="name" placeholder="请输入姓名"></textarea>
-    <select id="shenfen" onchange="handleSelect()">
-        <option value="">游客</option>
-        <option value="匿名用户">匿名用户</option>
-    </select>
+    <input id="name" placeholder="请输入姓名，匿名请填写匿名用户">
       <textarea id="message" placeholder="请输入要发送的内容"></textarea>
     <br>
     <button onclick="sendMail()">发送</button>
     <p id="status"></p>
 </div>
-<script>
-function handleSelect() {
-    if (shenfen.value === "匿名用户") {
-        name.value = "匿名用户";
-    } else {
-        name.value = "";
-    }
-}
-</script>
 
 <!-- EmailJS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
