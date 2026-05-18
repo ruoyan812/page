@@ -79,6 +79,18 @@ fetch('https://ipapi.co/json/')
     document.getElementById('country').innerText = '国家：获取失败';
 });
 </script>
+  <pre id="info"></pre>
+
+  <script>
+    const info = `
+浏览器名称：${navigator.appName}
+浏览器版本：${navigator.appVersion}
+用户代理字符串：${navigator.userAgent}
+平台：${navigator.platform}
+语言：${navigator.language}
+    `;
+    document.getElementById("info").textContent = info;
+  </script>
 <div class="time-box">
     <div id="time" class="time">--:--:--</div>
     <div id="date" class="date">----年--月--日 星期-</div>
