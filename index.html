@@ -1,41 +1,162 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Yanverse</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* 标题居中 */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        /* 时间模块容器 */
+        .time-box {
+            width: 260px;
+            margin: 20px auto; /* 居中 */
+            text-align: center;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .time {
+            font-size: 32px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .date {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 友情链接 */
+        .links {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .links ul {
+            list-style: disc;
+            padding-left: 20px;
+            display: inline-block; /* 让列表居中 */
+        }
+
+        .links li {
+            margin: 5px 0;
+        }
+
+        .links a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        /* 底部链接 */
+        .footer-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .footer-links a {
+            color: #0066cc;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* 页脚版权 */
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
+    <!-- 标题 -->
     <header class="header">
         <h1>Welcome to Yanverse</h1>
     </header>
 
-    <main class="container">
-        <section class="time-section">
-            <div id="time" class="time">--:--:--</div>
-            <div id="date" class="date">----年--月--日 星期-</div>
-        </section>
+    <!-- 时间模块 -->
+    <div class="time-box">
+        <div id="time" class="time">--:--:--</div>
+        <div id="date" class="date">----年--月--日 星期-</div>
+    </div>
 
-        <section class="links">
-            <p><strong>友情链接</strong></p>
-            <ul>
-                <li><a href="https://yuanbao.tencent.com" target="_blank">元宝</a></li>
-                <li><a href="color">颜色调配小游戏</a></li>
-                <li><a href="https://test.page.roooooyan.work" target="_blank">Test</a></li>
-                <li><a href="search">Search</a></li>
-            </ul>
-        </section>
+    <!-- 友情链接 -->
+    <section class="links">
+        <h3>友情链接</h3>
+        <ul>
+            <li><a href="https://yuanbao.tencent.com">元宝</a></li>
+            <li><a href="color">颜色调配小游戏</a></li>
+            <li><a href="https://test.page.roooooyan.work">Test</a></li>
+            <li><a href="search">Search</a></li>
+        </ul>
+    </section>
 
-        <nav class="nav">
-            <a href="info.html">访问信息</a>
-            <a href="feedback.html">意见反馈</a>
-        </nav>
-    </main>
+    <!-- 底部功能链接 -->
+    <div class="footer-links">
+        <a href="info.html">访问信息</a>
+        <a href="feedback.html">意见反馈</a>
+    </div>
 
+    <!-- 页脚版权 -->
     <footer>
-        <code>© 2013 - 2026 Yanverse</code>
+        &copy; 2013 - 2026 Yanverse
     </footer>
 
-    <script src="assets/js/main.js"></script>
+    <!-- 时间更新脚本 -->
+    <script>
+        function updateTime() {
+            const now = new Date();
+
+            // 时间（24小时制）
+            const timeStr = now.toLocaleTimeString("zh-CN", {
+                hour12: false,
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+            });
+
+            // 日期（带星期）
+            const dateStr = now.toLocaleDateString("zh-CN", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                weekday: "long",
+            });
+
+            document.getElementById("time").textContent = timeStr;
+            document.getElementById("date").textContent = dateStr;
+        }
+
+        // 初始化时间 + 每秒更新
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
 </body>
 </html>
