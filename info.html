@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>访问信息 - Yanverse</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>你的访问信息</h1>
+    </header>
+
+    <main class="container">
+        <div class="info-box">
+            <p id="ip">IP：正在获取...</p>
+            <p id="version">IP版本：正在获取...</p>
+            <p id="country">国家：正在获取...</p>
+            <div id="ua-info"></div>
+        </div>
+    </main>
+
+    <footer>
+        <code>© 2013 - 2026 Yanverse</code>
+    </footer>
+
+    <script>
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('ip').innerText = 'IP：' + data.ip;
+                document.getElementById('version').innerText = 'IP版本：' + data.version;
+                document.getElementById('country').innerText = '国家：' + data.country_name;
+            })
+            .catch(() => {
+                document.getElementById('ip').innerText = 'IP：获取失败';
+                document.getElementById('version').innerText = 'IP版本：获取失败';
+                document.getElementById('country').innerText = '国家：获取失败';
+            });
+
+        if (navigator.userAgentData) {
+            navigator.userAgentData.getHighEntropyValues(["uaFullVersion"])
+                .then(ua => {
+                    document.getElementById('ua-info').innerHTML = `
+                        <p>浏览器品牌：${navigator.userAgentData.brands.map(b => b.brand).join(', ')}</p>
+                        <p>浏览器版本：${ua.uaFullVersion}</p>
+                    `;
+                });
+        }
+    </script>
+</body>
+</html>
