@@ -12,6 +12,10 @@
             background: #f9fafb;
             color: #111827;
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .app-header {
@@ -38,10 +42,9 @@
         }
 
         .app-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 24px;
-            min-height: calc(100vh - 156px);
+            max-width: none;   /* 取消 800px 限制 */
+            padding: 0;       /* 去掉内边距 */
+            height: calc(100vh - 56px); /* header 高度 */
         }
 
         .hero-section {
@@ -60,12 +63,15 @@
             border-radius: 12px;
             border: 1px solid #e5e7eb;
             overflow: hidden;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0;
         }
         .result-card iframe {
-            width: 100%;
-            height: 700px;
-            border: none;
-            display: block;
+             width: 100%;
+             height: 100%;
+             border: none;
         }
 
         .app-footer {
