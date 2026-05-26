@@ -3,639 +3,615 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>>颜色混合实验室<</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>颜色调色盘 - Yanverse</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
+        *, *::before, *::after { box-sizing: border-box; }
+        html { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; }
         body {
+            margin: 0;
+            background: #f9fafb;
+            color: #111827;
             min-height: 100vh;
+        }
+
+        .app-header {
+            background: #1f2937;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            height: 56px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 20px;
-            transition: background 1.5s ease;
-            background: linear-gradient(135deg, #ff0000, #00ff00, #0000ff);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            justify-content: space-between;
         }
-        
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 900px;
-            background-color: rgba(255, 255, 255, 0.92);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-        
-        header {
-            background: linear-gradient(to right, #333, #222);
-            color: white;
-            padding: 25px 30px;
-            text-align: center;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 5px;
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
             letter-spacing: 1px;
+            cursor: pointer;
         }
-        
-        .subtitle {
-            color: #aaa;
-            font-size: 1.1rem;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
-        
-        .lab-content {
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all .2s;
+        }
+        .nav-links a:hover {
+            color: #06b6d4;
+            background: rgba(6,182,212,0.1);
+        }
+
+        .app-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px;
+            min-height: calc(100vh - 156px);
             display: flex;
             flex-direction: column;
-            padding: 30px;
-        }
-        
-        .color-display {
-            height: 180px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
         }
-        
-        .controls-container {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 25px;
-        }
-        
-        .palette-section {
-            flex: 1;
-            background-color: rgba(245, 245, 245, 0.9);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .palette-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #333;
-            text-align: center;
-        }
-        
-        .color-palette {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .palette-color {
-            aspect-ratio: 1;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 2px solid transparent;
-        }
-        
-        .palette-color:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .palette-color.active {
-            border-color: #333;
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .input-section {
-            margin-bottom: 20px;
-        }
-        
-        .input-label {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #555;
-            display: block;
-        }
-        
-        .color-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-family: 'Yu Gothic UI', 'Meiryo', 'MS Gothic', sans-serif;
-            transition: all 0.3s;
-            background-color: white;
-        }
-        
-        .color-input:focus {
-            outline: none;
-            border-color: #4a6fa5;
-            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
-        }
-        
-        .input-hint {
-            font-size: 0.85rem;
-            color: #888;
-            margin-top: 5px;
-        }
-        
-        .current-color-info {
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            margin-top: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .current-color-info:hover {
-            background-color: rgba(255, 255, 255, 1);
-            border-color: #4a6fa5;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(74, 111, 165, 0.2);
-        }
-        
-        .current-color-info:active {
-            transform: translateY(0);
-        }
-        
-        .hex-value {
-            font-size: 2.2rem;
-            font-weight: bold;
-            font-family: 'Yu Gothic UI', 'Meiryo', 'MS Gothic', sans-serif;
-            letter-spacing: 1px;
-            color: #333;
-            margin-bottom: 8px;
-            transition: color 0.3s;
-        }
-        
-        .rgb-value {
-            font-size: 1.4rem;
-            font-weight: 600;
-            font-family: 'Yu Gothic UI', 'Meiryo', 'MS Gothic', sans-serif;
-            color: #555;
-            transition: color 0.3s;
-        }
-        
-        .copy-hint {
-            font-size: 0.9rem;
-            color: #888;
-            margin-top: 8px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .current-color-info:hover .copy-hint {
-            opacity: 1;
-        }
-        
-        .sliders-section {
-            flex: 1;
-            background-color: rgba(245, 245, 245, 0.9);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .slider-group {
-            margin-bottom: 25px;
-        }
-        
-        .slider-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .slider-label {
-            display: none;
-        }
-        
-        .slider-value {
-            font-weight: bold;
-            font-size: 1.2rem;
-            background-color: #333;
-            color: white;
-            padding: 3px 12px;
+
+        .wheel-wrapper {
+            background: #fff;
             border-radius: 20px;
-            min-width: 50px;
-            text-align: center;
+            padding: 32px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
         }
-        
-        .slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 16px;
-            border-radius: 10px;
-            outline: none;
+
+        .wheel-area {
+            position: relative;
+            width: 400px;
+            height: 400px;
         }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 32px;
-            height: 32px;
+        .wheel-area canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
             border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            border: 3px solid white;
         }
-        
-        #red-slider {
-            background: linear-gradient(to right, #000, #f00);
-        }
-        
-        #red-slider::-webkit-slider-thumb {
-            background-color: #f00;
-        }
-        
-        #green-slider {
-            background: linear-gradient(to right, #000, #0f0);
-        }
-        
-        #green-slider::-webkit-slider-thumb {
-            background-color: #0f0;
-        }
-        
-        #blue-slider {
-            background: linear-gradient(to right, #000, #00f);
-        }
-        
-        #blue-slider::-webkit-slider-thumb {
-            background-color: #00f;
-        }
-        
-        footer {
+        #wheelBase { cursor: default; }
+        #wheelOverlay { pointer-events: none; }
+
+        .color-info {
+            width: 100%;
+            max-width: 360px;
             text-align: center;
-            padding: 20px;
-            color: #777;
-            font-size: 0.9rem;
-            border-top: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
         }
-        
-        .notification {
+
+        .color-preview-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+        }
+        .color-preview {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid #e5e7eb;
+            flex-shrink: 0;
+            transition: background .2s;
+        }
+
+        .value-column {
+            flex: 1;
+            text-align: left;
+            min-width: 0;
+        }
+
+        .copy-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background .2s;
+            user-select: none;
+        }
+        .copy-row:hover {
+            background: #ecfeff;
+        }
+        .copy-row:active {
+            background: #cffafe;
+        }
+        .copy-row .icon {
+            font-size: 12px;
+            color: #9ca3af;
+            flex-shrink: 0;
+            transition: color .2s;
+        }
+        .copy-row:hover .icon {
+            color: #06b6d4;
+        }
+        .copy-row .label {
+            font-family: "SF Mono", "Cascadia Code", "Consolas", monospace;
+            color: #111827;
+        }
+        .hex-label { font-size: 22px; font-weight: 700; }
+        .rgb-label { font-size: 14px; font-weight: 500; color: #6b7280; }
+
+        .input-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+        .input-row input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: "SF Mono", "Cascadia Code", "Consolas", monospace;
+            outline: none;
+            transition: border-color .2s;
+        }
+        .input-row input:focus {
+            border-color: #06b6d4;
+            box-shadow: 0 0 0 3px rgba(6,182,212,0.1);
+        }
+        .input-row input.invalid {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+        }
+        .input-row button {
+            padding: 10px 20px;
+            background: #06b6d4;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s;
+            white-space: nowrap;
+        }
+        .input-row button:hover { background: #0891b2; }
+        .error-msg {
+            font-size: 13px;
+            color: #ef4444;
+            min-height: 20px;
+            text-align: left;
+        }
+
+        .app-footer {
+            background: #1f2937;
+            padding: 20px 24px;
+            text-align: center;
+        }
+        .app-footer p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .toast {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: #1f2937;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
             opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.3s ease;
-            z-index: 1000;
+            transition: all .3s;
+            pointer-events: none;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        
-        .notification.show {
+        .toast.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(-50%) translateY(0);
         }
-        
-        @media (max-width: 768px) {
-            .controls-container {
-                flex-direction: column;
-            }
-            
-            .color-palette {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .hex-value {
-                font-size: 1.8rem;
-            }
-            
-            .rgb-value {
-                font-size: 1.2rem;
-            }
+
+        @media (max-width: 576px) {
+            .app-header { padding: 0 16px; }
+            .nav-links a { font-size: 13px; padding: 4px 8px; }
+            .app-content { padding: 16px; }
+            .wheel-wrapper { padding: 20px; }
+            .wheel-area { width: 300px; height: 300px; }
+            #wheelBase, #wheelOverlay { width: 300px; height: 300px; }
+            .color-preview-row { flex-wrap: wrap; justify-content: center; }
+            .value-column { text-align: center; }
+            .hex-label { font-size: 18px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-palette"></i> 颜色混合实验室</h1>
-            <p class="subtitle">从调色盘选择、拖动滑块或输入颜色值，点击颜色值即可复制</p>
-        </header>
-        
-        <div class="lab-content">
-            <div class="color-display" id="colorDisplay"></div>
-            
-            <div class="controls-container">
-                <div class="palette-section">
-                    <div class="palette-title">调色盘</div>
-                    <div class="color-palette" id="colorPalette"></div>
-                    
-                    <div class="input-section">
-                        <label class="input-label" for="colorInput">输入颜色值</label>
-                        <input type="text" class="color-input" id="colorInput" placeholder="#FF5733 或 rgb(255, 87, 51)">
-                        <div class="input-hint">支持 HEX (#RGB, #RRGGBB) 或 RGB (rgb(r,g,b)) 格式</div>
-                    </div>
-                    
-                    <div class="palette-title">当前颜色值</div>
-                    <div class="current-color-info" id="colorInfo">
-                        <div class="hex-value" id="hexValue">#FF0000</div>
-                        <div class="rgb-value" id="rgbValue">rgb(255, 0, 0)</div>
-                        <div class="copy-hint"><i class="fas fa-mouse-pointer"></i> 点击复制颜色值</div>
+    <header class="app-header">
+        <div class="header-content">
+            <span class="brand" onclick="location.href='/'">Yanverse</span>
+            <nav class="nav-links">
+                <a href="https://yuanbao.tencent.com">元宝</a>
+                <a href="color">颜色调配</a>
+                <a href="https://test.page.roooooyan.work">Test</a>
+                <a href="search">Search</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-content">
+        <div class="wheel-wrapper">
+            <div class="wheel-area" id="wheelArea">
+                <canvas id="wheelBase" width="400" height="400"></canvas>
+                <canvas id="wheelOverlay" width="400" height="400"></canvas>
+            </div>
+
+            <div class="color-info">
+                <div class="color-preview-row">
+                    <div class="color-preview" id="colorPreview"></div>
+                    <div class="value-column">
+                        <div class="copy-row" id="copyHex">
+                            <span class="label hex-label" id="hexValue">#FFFFFF</span>
+                            <span class="icon">📋</span>
+                        </div>
+                        <div class="copy-row" id="copyRgb">
+                            <span class="label rgb-label" id="rgbValue">rgb(255, 255, 255)</span>
+                            <span class="icon">📋</span>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="sliders-section">
-                    <div class="slider-group">
-                        <div class="slider-header">
-                            <span class="slider-label"></span>
-                            <span class="slider-value" id="redValue">255</span>
-                        </div>
-                        <input type="range" min="0" max="255" value="255" class="slider" id="red-slider">
+
+                <div class="input-section">
+                    <div class="input-row">
+                        <input type="text" id="colorInput" placeholder="#FF0000 或 rgb(255,0,0)" autocomplete="off">
+                        <button id="applyBtn">确定</button>
                     </div>
-                    
-                    <div class="slider-group">
-                        <div class="slider-header">
-                            <span class="slider-label"></span>
-                            <span class="slider-value" id="greenValue">0</span>
-                        </div>
-                        <input type="range" min="0" max="255" value="0" class="slider" id="green-slider">
-                    </div>
-                    
-                    <div class="slider-group">
-                        <div class="slider-header">
-                            <span class="slider-label"></span>
-                            <span class="slider-value" id="blueValue">0</span>
-                        </div>
-                        <input type="range" min="0" max="255" value="0" class="slider" id="blue-slider">
-                    </div>
+                    <div class="error-msg" id="errorMsg"></div>
                 </div>
             </div>
         </div>
-        
-        <footer>
-            <p>© 2013 - 2026 Yanverse</p>
-        </footer>
-    </div>
-    
-    <div class="notification" id="notification">复制成功</div>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2013 - 2026 Yanverse</p>
+    </footer>
+
+    <div class="toast" id="toast"></div>
 
     <script>
-        // 获取DOM元素
-        const redSlider = document.getElementById('red-slider');
-        const greenSlider = document.getElementById('green-slider');
-        const blueSlider = document.getElementById('blue-slider');
-        const redValue = document.getElementById('redValue');
-        const greenValue = document.getElementById('greenValue');
-        const blueValue = document.getElementById('blueValue');
-        const colorDisplay = document.getElementById('colorDisplay');
-        const hexValue = document.getElementById('hexValue');
-        const rgbValue = document.getElementById('rgbValue');
-        const colorInfo = document.getElementById('colorInfo');
-        const notification = document.getElementById('notification');
-        const body = document.body;
-        const colorPalette = document.getElementById('colorPalette');
-        const colorInput = document.getElementById('colorInput');
-        
-        // 初始化颜色
-        let red = 255;
-        let green = 0;
-        let blue = 0;
-        
-        // 预定义调色盘颜色
-        const paletteColors = [
-            '#FF0000', '#FF4500', '#FF6347', '#FF7F50', '#CD5C5C', '#DC143C',
-            '#FF8C00', '#FFA500', '#FFD700', '#FFFF00', '#F0E68C', '#BDB76B',
-            '#008000', '#00FF00', '#32CD32', '#90EE90', '#98FB98', '#00FA9A',
-            '#00FFFF', '#00CED1', '#40E0D0', '#48D1CC', '#20B2AA', '#5F9EA0',
-            '#0000FF', '#4169E1', '#0000CD', '#1E90FF', '#00BFFF', '#87CEEB',
-            '#8A2BE2', '#9370DB', '#9932CC', '#BA55D3', '#DA70D6', '#EE82EE',
-            '#FF1493', '#FF69B4', '#FFB6C1', '#FFC0CB', '#DB7093', '#C71585',
-            '#000000', '#2F4F4F', '#696969', '#808080', '#A9A9A9', '#FFFFFF'
-        ];
-        
-        // 生成调色盘
-        function generatePalette() {
-            paletteColors.forEach(color => {
-                const colorDiv = document.createElement('div');
-                colorDiv.className = 'palette-color';
-                colorDiv.style.backgroundColor = color;
-                colorDiv.dataset.color = color;
-                
-                colorDiv.addEventListener('click', () => {
-                    selectPaletteColor(color, colorDiv);
-                });
-                
-                colorPalette.appendChild(colorDiv);
-            });
-            
-            // 默认选中第一个颜色
-            const firstColor = colorPalette.firstChild;
-            if (firstColor) {
-                firstColor.classList.add('active');
-            }
+        var baseCanvas = document.getElementById('wheelBase');
+        var overlayCanvas = document.getElementById('wheelOverlay');
+        var baseCtx = baseCanvas.getContext('2d');
+        var overlayCtx = overlayCanvas.getContext('2d');
+
+        var size = baseCanvas.width;
+        var cx = size / 2;
+        var cy = size / 2;
+        var radius = size / 2 - 2;
+
+        var currentColor = { hex: '#FFFFFF', rgbStr: 'rgb(255, 255, 255)', r: 255, g: 255, b: 255 };
+        var markerX = -1, markerY = -1;
+        var markerVisible = false;
+
+        function hsvToRgb(h, s, v) {
+            var i = Math.floor(h * 6);
+            var f = h * 6 - i;
+            var p = v * (1 - s);
+            var q = v * (1 - f * s);
+            var t = v * (1 - (1 - f) * s);
+            i = i % 6;
+            if (i === 0) return [v * 255, t * 255, p * 255];
+            if (i === 1) return [q * 255, v * 255, p * 255];
+            if (i === 2) return [p * 255, v * 255, t * 255];
+            if (i === 3) return [p * 255, q * 255, v * 255];
+            if (i === 4) return [t * 255, p * 255, v * 255];
+            if (i === 5) return [v * 255, p * 255, q * 255];
         }
-        
-        // 选择调色盘颜色
-        function selectPaletteColor(hexColor, element) {
-            // 移除所有active类
-            document.querySelectorAll('.palette-color').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // 添加active类到当前元素
-            element.classList.add('active');
-            
-            // 解析HEX颜色为RGB
-            const r = parseInt(hexColor.slice(1, 3), 16);
-            const g = parseInt(hexColor.slice(3, 5), 16);
-            const b = parseInt(hexColor.slice(5, 7), 16);
-            
-            // 更新滑块值
-            redSlider.value = r;
-            greenSlider.value = g;
-            blueSlider.value = b;
-            
-            // 更新输入框
-            colorInput.value = hexColor;
-            
-            // 更新颜色
-            updateColor();
-        }
-        
-        // 更新颜色显示
-        function updateColor() {
-            // 获取当前滑块值
-            red = parseInt(redSlider.value);
-            green = parseInt(greenSlider.value);
-            blue = parseInt(blueSlider.value);
-            
-            // 更新显示的值
-            redValue.textContent = red;
-            greenValue.textContent = green;
-            blueValue.textContent = blue;
-            
-            // 计算HEX值
-            const hex = rgbToHex(red, green, blue);
-            
-            // 更新颜色显示区域
-            colorDisplay.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
-            hexValue.textContent = hex;
-            rgbValue.textContent = `rgb(${red}, ${green}, ${blue})`;
-            
-            // 更新输入框（如果输入框不是当前焦点）
-            if (document.activeElement !== colorInput) {
-                colorInput.value = hex;
-            }
-            
-            // 更新背景渐变
-            updateBackgroundGradient();
-            
-            // 更新调色盘选中状态
-            updatePaletteSelection(hex);
-        }
-        
-        // 更新调色盘选中状态
-        function updatePaletteSelection(currentHex) {
-            document.querySelectorAll('.palette-color').forEach(el => {
-                el.classList.remove('active');
-                if (el.dataset.color.toUpperCase() === currentHex.toUpperCase()) {
-                    el.classList.add('active');
-                }
-            });
-        }
-        
-        // RGB转HEX函数
+
         function rgbToHex(r, g, b) {
-            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+            return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
         }
-        
-        // 解析颜色输入
-        function parseColorInput(input) {
-            input = input.trim().toLowerCase();
-            
-            // 检查HEX格式 (#RGB 或 #RRGGBB)
-            if (input.startsWith('#')) {
-                // 移除#号
-                input = input.substring(1);
-                
-                // 处理3位HEX (#RGB)
-                if (input.length === 3) {
-                    input = input[0] + input[0] + input[1] + input[1] + input[2] + input[2];
-                }
-                
-                // 验证是否为6位有效的HEX
-                if (input.length === 6 && /^[0-9a-f]{6}$/i.test(input)) {
-                    const r = parseInt(input.substring(0, 2), 16);
-                    const g = parseInt(input.substring(2, 4), 16);
-                    const b = parseInt(input.substring(4, 6), 16);
-                    return { r, g, b };
-                }
+
+        function drawColorWheel() {
+            baseCtx.clearRect(0, 0, size, size);
+
+            // Conic gradient for hue around the circle
+            var conic = baseCtx.createConicGradient(0, cx, cy);
+            conic.addColorStop(0.000, '#FF0000');
+            conic.addColorStop(0.167, '#FFFF00');
+            conic.addColorStop(0.333, '#00FF00');
+            conic.addColorStop(0.500, '#00FFFF');
+            conic.addColorStop(0.667, '#0000FF');
+            conic.addColorStop(0.833, '#FF00FF');
+            conic.addColorStop(1.000, '#FF0000');
+
+            baseCtx.save();
+            baseCtx.beginPath();
+            baseCtx.arc(cx, cy, radius, 0, Math.PI * 2);
+            baseCtx.clip();
+            baseCtx.fillStyle = conic;
+            baseCtx.fillRect(0, 0, size, size);
+
+            // Radial overlay: white center → transparent edge (controls saturation)
+            var radial = baseCtx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+            radial.addColorStop(0, 'rgba(255,255,255,1)');
+            radial.addColorStop(1, 'rgba(255,255,255,0)');
+            baseCtx.fillStyle = radial;
+            baseCtx.fillRect(0, 0, size, size);
+            baseCtx.restore();
+        }
+
+        function getColorAtPixel(x, y) {
+            var dx = x - cx;
+            var dy = y - cy;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > radius) return null;
+            var angle = Math.atan2(dy, dx) + Math.PI;
+            var h = angle / (Math.PI * 2);
+            var s = dist / radius;
+            var rgb = hsvToRgb(h, s, 1);
+            return {
+                r: Math.round(rgb[0]),
+                g: Math.round(rgb[1]),
+                b: Math.round(rgb[2]),
+                hex: rgbToHex(Math.round(rgb[0]), Math.round(rgb[1]), Math.round(rgb[2])),
+                rgbStr: 'rgb(' + Math.round(rgb[0]) + ', ' + Math.round(rgb[1]) + ', ' + Math.round(rgb[2]) + ')'
+            };
+        }
+
+        function updateColorInfo(color) {
+            currentColor = color;
+            document.getElementById('colorPreview').style.background = color.hex;
+            document.getElementById('hexValue').textContent = color.hex;
+            document.getElementById('rgbValue').textContent = color.rgbStr;
+            document.getElementById('errorMsg').textContent = '';
+            document.getElementById('colorInput').value = '';
+        }
+
+        function drawMarker(x, y) {
+            overlayCtx.clearRect(0, 0, size, size);
+            if (!markerVisible) return;
+            var dx = x - cx;
+            var dy = y - cy;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > radius) return;
+
+            // Outer ring
+            overlayCtx.beginPath();
+            overlayCtx.arc(x, y, 12, 0, Math.PI * 2);
+            overlayCtx.strokeStyle = '#fff';
+            overlayCtx.lineWidth = 3;
+            overlayCtx.stroke();
+
+            // Inner ring
+            overlayCtx.beginPath();
+            overlayCtx.arc(x, y, 10, 0, Math.PI * 2);
+            overlayCtx.strokeStyle = '#111827';
+            overlayCtx.lineWidth = 1.5;
+            overlayCtx.stroke();
+        }
+
+        function updateFromWheel(x, y) {
+            var color = getColorAtPixel(x, y);
+            if (!color) return;
+            markerX = x;
+            markerY = y;
+            markerVisible = true;
+            drawMarker(x, y);
+            updateColorInfo(color);
+        }
+
+        function getCanvasXY(e) {
+            var rect = baseCanvas.getBoundingClientRect();
+            var scaleX = baseCanvas.width / rect.width;
+            var scaleY = baseCanvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function handlePick(e) {
+            var p = getCanvasXY(e);
+            updateFromWheel(p.x, p.y);
+        }
+
+        function handleHover(e) {
+            var p = getCanvasXY(e);
+            var c = getColorAtPixel(p.x, p.y);
+            if (c) {
+                markerX = p.x;
+                markerY = p.y;
+                markerVisible = true;
+                drawMarker(p.x, p.y);
+            } else {
+                markerVisible = false;
+                drawMarker(0, 0);
             }
-            
-            // 检查RGB格式 (rgb(r, g, b))
-            const rgbMatch = input.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-            if (rgbMatch) {
-                const r = parseInt(rgbMatch[1]);
-                const g = parseInt(rgbMatch[2]);
-                const b = parseInt(rgbMatch[3]);
-                
-                // 验证RGB值是否在有效范围内
-                if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
-                    return { r, g, b };
-                }
-            }
-            
-            return null;
         }
-        
-        // 处理颜色输入
-        function handleColorInput() {
-            const input = colorInput.value;
-            const color = parseColorInput(input);
-            
-            if (color) {
-                // 更新滑块值
-                redSlider.value = color.r;
-                greenSlider.value = color.g;
-                blueSlider.value = color.b;
-                
-                // 更新颜色
-                updateColor();
-            }
+
+        function handleLeave() {
+            markerVisible = false;
+            drawMarker(0, 0);
         }
-        
-        // 更新背景渐变
-        function updateBackgroundGradient() {
-            // 创建基于当前颜色的渐变背景
-            const color1 = `rgb(${red}, ${green}, ${blue})`;
-            const color2 = `rgb(${Math.max(0, red-80)}, ${Math.max(0, green-80)}, ${Math.max(0, blue-80)})`;
-            const color3 = `rgb(${Math.min(255, red+80)}, ${Math.min(255, green+80)}, ${Math.min(255, blue+80)})`;
-            
-            body.style.background = `linear-gradient(135deg, ${color1}, ${color2}, ${color3})`;
+
+        // --- Copy ---
+        function showToast(text) {
+            var t = document.getElementById('toast');
+            t.textContent = text;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(function() { t.classList.remove('show'); }, 1800);
         }
-        
-        // 复制颜色值到剪贴板
-        function copyToClipboard() {
-            const hex = hexValue.textContent;
-            const rgb = rgbValue.textContent;
-            const textToCopy = `${hex}\n${rgb}`;
-            
-            // 使用现代剪贴板API
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                // 显示通知
-                notification.textContent = "复制成功";
-                notification.classList.add('show');
-                
-                // 2秒后隐藏通知
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 2000);
-            }).catch(err => {
-                console.error('复制失败: ', err);
-                alert('复制失败，请手动复制: ' + hex + ' ' + rgb);
+
+        document.getElementById('copyHex').addEventListener('click', function() {
+            navigator.clipboard.writeText(currentColor.hex).then(function() {
+                showToast('已复制 ' + currentColor.hex);
+            }).catch(function() {
+                showToast('复制失败');
             });
-        }
-        
-        // 添加事件监听器
-        redSlider.addEventListener('input', updateColor);
-        greenSlider.addEventListener('input', updateColor);
-        blueSlider.addEventListener('input', updateColor);
-        colorInfo.addEventListener('click', copyToClipboard);
-        colorInput.addEventListener('input', handleColorInput);
-        colorInput.addEventListener('change', handleColorInput);
-        colorInput.addEventListener('blur', handleColorInput);
-        
-        // 初始化
-        generatePalette();
-        updateColor();
-        
-        // 添加键盘快捷键支持
-        document.addEventListener('keydown', (e) => {
-            // Ctrl+C 或 Cmd+C 复制颜色值
-            if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
-                copyToClipboard();
-            }
         });
+
+        document.getElementById('copyRgb').addEventListener('click', function() {
+            navigator.clipboard.writeText(currentColor.rgbStr).then(function() {
+                showToast('已复制 ' + currentColor.rgbStr);
+            }).catch(function() {
+                showToast('复制失败');
+            });
+        });
+
+        // --- Input validation ---
+        function parseColor(str) {
+            str = str.trim();
+            // HEX
+            var hexMatch = str.match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/);
+            if (hexMatch) {
+                var h = hexMatch[1];
+                if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+                return {
+                    r: parseInt(h.slice(0,2), 16),
+                    g: parseInt(h.slice(2,4), 16),
+                    b: parseInt(h.slice(4,6), 16),
+                    valid: true
+                };
+            }
+            // RGB
+            var rgbMatch = str.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/);
+            if (rgbMatch) {
+                var r = parseInt(rgbMatch[1]), g = parseInt(rgbMatch[2]), b = parseInt(rgbMatch[3]);
+                if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
+                    return { r: r, g: g, b: b, valid: true };
+                }
+            }
+            return { valid: false };
+        }
+
+        function findPositionOnWheel(r, g, b) {
+            // Convert RGB to HSV
+            var rn = r / 255, gn = g / 255, bn = b / 255;
+            var max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn);
+            var diff = max - min;
+            var h, s = max === 0 ? 0 : diff / max;
+
+            if (diff === 0) {
+                h = 0;
+            } else if (max === rn) {
+                h = ((gn - bn) / diff) % 6;
+            } else if (max === gn) {
+                h = (bn - rn) / diff + 2;
+            } else {
+                h = (rn - gn) / diff + 4;
+            }
+            h = h * 60;
+            if (h < 0) h += 360;
+
+            // Map HSV to wheel coordinates
+            var angleDeg = h;
+            var angleRad = (angleDeg - 90) * Math.PI / 180;
+            var dist = s * radius;
+
+            var px = cx + dist * Math.cos(angleRad);
+            var py = cy + dist * Math.sin(angleRad);
+
+            // Clamp to wheel bounds
+            var d = Math.sqrt((px-cx)*(px-cx) + (py-cy)*(py-cy));
+            if (d > radius) {
+                px = cx + (px-cx)/d * radius;
+                py = cy + (py-cy)/d * radius;
+            }
+
+            return { x: Math.round(px), y: Math.round(py) };
+        }
+
+        function applyInput() {
+            var input = document.getElementById('colorInput');
+            var err = document.getElementById('errorMsg');
+            var result = parseColor(input.value);
+            if (!result.valid) {
+                input.classList.add('invalid');
+                err.textContent = '不符合规则，请重输~';
+                setTimeout(function() { input.classList.remove('invalid'); }, 600);
+                return;
+            }
+            err.textContent = '';
+            input.classList.remove('invalid');
+
+            var hex = rgbToHex(result.r, result.g, result.b);
+            var rgbStr = 'rgb(' + result.r + ', ' + result.g + ', ' + result.b + ')';
+            var color = { hex: hex, rgbStr: rgbStr, r: result.r, g: result.g, b: result.b };
+
+            // Update wheel marker
+            var pos = findPositionOnWheel(result.r, result.g, result.b);
+            markerX = pos.x;
+            markerY = pos.y;
+            markerVisible = true;
+            drawMarker(pos.x, pos.y);
+            updateColorInfo(color);
+        }
+
+        document.getElementById('applyBtn').addEventListener('click', applyInput);
+        document.getElementById('colorInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') applyInput();
+        });
+        document.getElementById('colorInput').addEventListener('input', function() {
+            document.getElementById('errorMsg').textContent = '';
+            this.classList.remove('invalid');
+        });
+
+        // --- Events ---
+        baseCanvas.addEventListener('click', handlePick);
+        baseCanvas.addEventListener('mousemove', handleHover);
+        baseCanvas.addEventListener('mouseleave', handleLeave);
+
+        // Touch
+        baseCanvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            var t = e.touches[0];
+            var rect = baseCanvas.getBoundingClientRect();
+            var scaleX = baseCanvas.width / rect.width;
+            var scaleY = baseCanvas.height / rect.height;
+            var x = (t.clientX - rect.left) * scaleX;
+            var y = (t.clientY - rect.top) * scaleY;
+            updateFromWheel(x, y);
+        }, { passive: false });
+        baseCanvas.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            var t = e.touches[0];
+            var rect = baseCanvas.getBoundingClientRect();
+            var scaleX = baseCanvas.width / rect.width;
+            var scaleY = baseCanvas.height / rect.height;
+            var x = (t.clientX - rect.left) * scaleX;
+            var y = (t.clientY - rect.top) * scaleY;
+            updateFromWheel(x, y);
+        }, { passive: false });
+
+        // Init — center of wheel
+        markerX = cx;
+        markerY = cy;
+        markerVisible = true;
+        drawColorWheel();
+        drawMarker(cx, cy);
+        updateColorInfo(currentColor);
     </script>
 </body>
 </html>
