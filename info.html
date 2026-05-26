@@ -2,96 +2,140 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>访问信息 - Yanverse</title>
- <style>
-     body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #ffffff;
-    color: #222;
-}
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        html { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body {
+            margin: 0;
+            background: #f9fafb;
+            color: #111827;
+            min-height: 100vh;
+        }
 
-.header {
-    text-align: center;
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-}
+        .app-header {
+            background: #1f2937;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
 
-.container {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
+        .app-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px;
+            min-height: calc(100vh - 156px);
+        }
 
-.time {
-    font-size: 32px;
-    font-weight: bold;
-}
+        .hero-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .hero-section h1 {
+            font-size: 28px;
+            color: #111827;
+            margin: 0;
+            font-weight: 600;
+        }
 
-.date {
-    font-size: 14px;
-    color: #666;
-}
+        .info-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .info-card p {
+            margin: 12px 0;
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.6;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #111827;
+        }
 
-input, textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-}
+        .app-footer {
+            background: #1f2937;
+            padding: 20px 24px;
+            text-align: center;
+        }
+        .app-footer p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 12px;
+        }
 
-button {
-    padding: 8px 16px;
-    cursor: pointer;
-}
-
-footer {
-    text-align: center;
-    padding: 20px;
-    font-size: 12px;
-    color: #999;
-}
- </style>
+        @media (max-width: 576px) {
+            .app-header { padding: 0 16px; }
+            .app-content { padding: 16px; }
+            .hero-section h1 { font-size: 22px; }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <h1>你的访问信息</h1>
+    <header class="app-header">
+        <div class="header-content">
+            <span class="brand" onclick="location.href='/'">Yanverse</span>
+        </div>
     </header>
 
-    <main class="container">
-        <div class="info-box">
-            <p id="ip">IP：正在获取...</p>
-            <p id="version">IP版本：正在获取...</p>
-            <p id="country">国家：正在获取...</p>
+    <main class="app-content">
+        <div class="hero-section">
+            <h1>你的访问信息</h1>
+        </div>
+
+        <div class="info-card">
+            <p><span class="info-label">IP：</span><span id="ip">正在获取...</span></p>
+            <p><span class="info-label">IP版本：</span><span id="version">正在获取...</span></p>
+            <p><span class="info-label">国家：</span><span id="country">正在获取...</span></p>
             <div id="ua-info"></div>
         </div>
     </main>
 
-    <footer>
-        <code>© 2013 - 2026 Yanverse</code>
+    <footer class="app-footer">
+        <p>&copy; 2013 - 2026 Yanverse</p>
     </footer>
 
     <script>
         fetch('https://ipapi.co/json/')
             .then(res => res.json())
             .then(data => {
-                document.getElementById('ip').innerText = 'IP：' + data.ip;
-                document.getElementById('version').innerText = 'IP版本：' + data.version;
-                document.getElementById('country').innerText = '国家：' + data.country_name;
+                document.getElementById('ip').innerText = data.ip;
+                document.getElementById('version').innerText = data.version;
+                document.getElementById('country').innerText = data.country_name;
             })
             .catch(() => {
-                document.getElementById('ip').innerText = 'IP：获取失败';
-                document.getElementById('version').innerText = 'IP版本：获取失败';
-                document.getElementById('country').innerText = '国家：获取失败';
+                document.getElementById('ip').innerText = '获取失败';
+                document.getElementById('version').innerText = '获取失败';
+                document.getElementById('country').innerText = '获取失败';
             });
 
         if (navigator.userAgentData) {
             navigator.userAgentData.getHighEntropyValues(["uaFullVersion"])
                 .then(ua => {
-                    document.getElementById('ua-info').innerHTML = `
-                        <p>浏览器品牌：${navigator.userAgentData.brands.map(b => b.brand).join(', ')}</p>
-                        <p>浏览器版本：${ua.uaFullVersion}</p>
-                    `;
+                    document.getElementById('ua-info').innerHTML =
+                        '<p><span class="info-label">浏览器品牌：</span>' + navigator.userAgentData.brands.map(function(b) { return b.brand; }).join(', ') + '</p>' +
+                        '<p><span class="info-label">浏览器版本：</span>' + ua.uaFullVersion + '</p>';
                 });
         }
     </script>
