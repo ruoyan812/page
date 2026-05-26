@@ -36,7 +36,23 @@
             color: #fff;
             letter-spacing: 1px;
         }
-
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all .2s;
+        }
+        .nav-links a:hover {
+            color: #06b6d4;
+            background: rgba(6,182,212,0.1);
+        }
         .app-content {
             max-width: 800px;
             margin: 0 auto;
@@ -74,45 +90,6 @@
             color: #6b7280;
             margin-top: 4px;
         }
-
-        .section-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px 24px;
-            margin-bottom: 16px;
-            border: 1px solid #e5e7eb;
-        }
-        .section-card h3 {
-            margin: 0 0 16px;
-            font-size: 16px;
-            color: #111827;
-            font-weight: 600;
-        }
-
-        .links-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .links-list li { margin: 0; }
-        .links-list a {
-            color: #06b6d4;
-            text-decoration: none;
-            font-size: 14px;
-            padding: 8px 12px;
-            background: #ecfeff;
-            border-radius: 6px;
-            display: inline-block;
-            transition: all .2s;
-        }
-        .links-list a:hover {
-            background: #06b6d4;
-            color: #fff;
-        }
-
         .footer-links {
             display: flex;
             gap: 12px;
@@ -148,7 +125,7 @@
             .app-header { padding: 0 16px; }
             .app-content { padding: 16px; }
             .hero-section h1 { font-size: 22px; }
-            .links-list a { display: block; text-align: center; }
+            .nav-links a { font-size: 13px; padding: 4px 8px; }
         }
     </style>
 </head>
@@ -156,6 +133,11 @@
     <header class="app-header">
         <div class="header-content">
             <span class="brand">Yanverse</span>
+            <nav class="nav-links">
+             <a href="https://yuanbao.tencent.com">元宝</a>
+             <a href="color">颜色调配</a>
+             <a href="https://test.page.roooooyan.work">Test</a>
+             <a href="search">Search</a>
         </div>
     </header>
 
@@ -167,16 +149,6 @@
         <div class="time-card">
             <div class="time-display" id="time">--:--:--</div>
             <div class="date-display" id="date">----年--月--日 星期-</div>
-        </div>
-
-        <div class="section-card">
-            <h3>友情链接</h3>
-            <ul class="links-list">
-                <li><a href="https://yuanbao.tencent.com">元宝</a></li>
-                <li><a href="color">颜色调配小游戏</a></li>
-                <li><a href="https://test.page.roooooyan.work">Test</a></li>
-                <li><a href="search">Search</a></li>
-            </ul>
         </div>
 
         <div class="footer-links">
