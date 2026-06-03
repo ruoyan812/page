@@ -1,181 +1,416 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Yanverse</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        html { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        body {
-            margin: 0;
-            background: #f9fafb;
-            color: #111827;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yanverse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .app-header {
-            background: #1f2937;
-            padding: 0 24px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .header-content {
-            max-width: 800px;
-            margin: 0 auto;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 1px;
-        }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 14px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: all .2s;
-        }
-        .nav-links a:hover {
-            color: #06b6d4;
-            background: rgba(6,182,212,0.1);
-        }
-        .app-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 24px;
-            min-height: calc(100vh - 156px);
-        }
+  :root {
+    --primary: #06b6d4;
+    --primary-dark: #0891b2;
+    --gradient-1: #06b6d4;
+    --gradient-2: #3b82f6;
+    --gradient-3: #8b5cf6;
+    --bg: #f0f4f8;
+    --card-bg: rgba(255,255,255,0.75);
+    --card-border: rgba(255,255,255,0.3);
+    --text: #0f172a;
+    --text-soft: #64748b;
+    --nav-bg: rgba(15,23,42,0.9);
+    --nav-border: rgba(255,255,255,0.08);
+    --footer-bg: rgba(15,23,42,0.95);
+    --shadow: 0 8px 32px rgba(0,0,0,0.06);
+    --radius: 16px;
+    --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  }
 
-        .hero-section {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .hero-section h1 {
-            font-size: 28px;
-            color: #111827;
-            margin: 0;
-            font-weight: 600;
-        }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1120;
+      --card-bg: rgba(30,41,59,0.7);
+      --card-border: rgba(148,163,184,0.15);
+      --text: #f1f5f9;
+      --text-soft: #94a3b8;
+      --nav-bg: rgba(15,23,42,0.95);
+      --footer-bg: rgba(2,6,23,0.98);
+      --shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+  }
 
-        .time-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            max-width: 300px;
-            margin: 0 auto 24px;
-            border: 1px solid #e5e7eb;
-        }
-        .time-display {
-            font-size: 32px;
-            font-weight: 700;
-            color: #06b6d4;
-        }
-        .date-display {
-            font-size: 14px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
-        .footer-links {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-        .footer-links a {
-            color: #06b6d4;
-            text-decoration: none;
-            font-size: 13px;
-            padding: 6px 16px;
-            background: #06b6d41a;
-            border-radius: 4px;
-            transition: all .2s;
-        }
-        .footer-links a:hover {
-            background: #06b6d433;
-            color: #22d3ee;
-        }
+  html { font-family: var(--font); color: var(--text); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.4s, color 0.4s;
+  }
 
-        .app-footer {
-            background: #1f2937;
-            padding: 20px 24px;
-            text-align: center;
-        }
-        .app-footer p {
-            margin: 0;
-            color: #6b7280;
-            font-size: 12px;
-        }
+  /* ---- 浮动装饰 ---- */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 20s ease-in-out infinite alternate;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+    top: -120px; left: -80px;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: linear-gradient(135deg, var(--gradient-2), var(--gradient-3));
+    bottom: -100px; right: -60px;
+    animation-delay: -7s;
+  }
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: linear-gradient(135deg, var(--gradient-3), var(--gradient-1));
+    top: 50%; left: 60%;
+    animation-delay: -14s;
+    opacity: 0.15;
+  }
+  @keyframes orbFloat {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(30px, -40px) scale(1.08); }
+    66%  { transform: translate(-20px, 20px) scale(0.95); }
+    100% { transform: translate(10px, -10px) scale(1.05); }
+  }
 
-        @media (max-width: 576px) {
-            .app-header { padding: 0 16px; }
-            .app-content { padding: 16px; }
-            .hero-section h1 { font-size: 22px; }
-            .nav-links a { font-size: 13px; padding: 4px 8px; }
-        }
-    </style>
+  /* ---- 导航 ---- */
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--nav-border);
+    transition: background 0.3s;
+  }
+  .header-content {
+    max-width: 900px;
+    margin: 0 auto;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+  }
+  .brand {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gradient-1), var(--gradient-3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1.5px;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 2px; left: 50%;
+    width: 0; height: 2px;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: all 0.25s;
+    transform: translateX(-50%);
+  }
+  .nav-links a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+  }
+  .nav-links a:hover::after { width: 60%; }
+
+  /* ---- 主内容 ---- */
+  .app-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    position: relative;
+    z-index: 1;
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ---- Hero ---- */
+  .hero-section {
+    text-align: center;
+    margin-bottom: 8px;
+    animation: fadeUp 0.8s ease-out;
+  }
+  .hero-section h1 {
+    font-size: 40px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-soft) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1px;
+  }
+  @media (max-width: 576px) {
+    .hero-section h1 { font-size: 28px; }
+  }
+
+  #greeting {
+    font-size: 15px;
+    color: var(--text-soft);
+    margin-top: 6px;
+    font-weight: 400;
+  }
+
+  /* ---- 时间卡片 ---- */
+  .time-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 28px 40px;
+    text-align: center;
+    max-width: 360px;
+    width: 100%;
+    margin: 24px auto 40px;
+    box-shadow: var(--shadow);
+    transition: transform 0.25s, box-shadow 0.25s, background 0.3s;
+    animation: fadeUp 0.8s ease-out 0.1s both;
+  }
+  .time-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.1);
+  }
+  .time-display {
+    font-family: var(--mono);
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 2px;
+    line-height: 1.2;
+  }
+  .date-display {
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-top: 6px;
+  }
+
+  /* ---- 快捷入口 ---- */
+  .quick-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 560px;
+    animation: fadeUp 0.8s ease-out 0.2s both;
+  }
+  .quick-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 20px 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .quick-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    border-color: var(--primary);
+  }
+  .quick-link .icon {
+    font-size: 28px;
+    line-height: 1;
+  }
+  .quick-link .label {
+    font-size: 13px;
+    color: var(--text-soft);
+  }
+
+  /* ---- 底部链接 ---- */
+  .footer-links {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 32px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s ease-out 0.3s both;
+  }
+  .footer-links a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 7px 18px;
+    background: rgba(6,182,212,0.08);
+    border-radius: 8px;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+  .footer-links a:hover {
+    background: rgba(6,182,212,0.15);
+    border-color: rgba(6,182,212,0.25);
+    color: var(--primary-dark);
+  }
+
+  /* ---- Footer ---- */
+  .app-footer {
+    background: var(--footer-bg);
+    padding: 20px 24px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--nav-border);
+    transition: background 0.3s;
+  }
+  .app-footer p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 12px;
+  }
+
+  /* ---- 动画 ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- 响应式 ---- */
+  @media (max-width: 576px) {
+    .header-content { padding: 0 16px; }
+    .app-content { padding: 32px 16px 48px; }
+    .time-card { padding: 20px 24px; }
+    .time-display { font-size: 36px; }
+    .quick-links { grid-template-columns: repeat(2, 1fr); }
+    .nav-links a { font-size: 12px; padding: 5px 8px; }
+  }
+</style>
 </head>
 <body>
-    <header class="app-header">
-        <div class="header-content">
-            <span class="brand">Yanverse</span>
-            <nav class="nav-links">
-             <a href="https://yuanbao.tencent.com">友情链接·元宝</a>
-             <a href="https://test.page.roooooyan.work">Test</a>
-             <a href="search">Search</a>
-             <a href="https://game.page.roooooyan.work">Game</a>
-             <a href="http://file-change.page.roooooyan.work/">File Exchange</a>
-        </div>
-    </header>
 
-    <main class="app-content">
-        <div class="hero-section">
-            <h1>Welcome to Yanverse</h1>
-        </div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
-        <div class="time-card">
-            <div class="time-display" id="time">--:--:--</div>
-            <div class="date-display" id="date">----年--月--日 星期-</div>
-        </div>
+<header class="app-header">
+  <div class="header-content">
+    <span class="brand">Yanverse</span>
+    <nav class="nav-links">
+      <a href="https://yuanbao.tencent.com">元宝</a>
+      <a href="https://test.page.roooooyan.work">Test</a>
+      <a href="search">Search</a>
+      <a href="https://game.page.roooooyan.work">Game</a>
+      <a href="http://file-change.page.roooooyan.work/">Files</a>
+    </nav>
+  </div>
+</header>
 
-        <div class="footer-links">
-            <a href="info.html">访问信息</a>
-            <a href="feedback.html">意见反馈</a>
-        </div>
-    </main>
+<main class="app-content">
+  <div class="hero-section">
+    <h1>Welcome to Yanverse</h1>
+    <p id="greeting"></p>
+  </div>
 
-    <footer class="app-footer">
-        <p>&copy; 2013 - 2026 Yanverse</p>
-    </footer>
+  <div class="time-card">
+    <div class="time-display" id="time">--:--:--</div>
+    <div class="date-display" id="date">----年--月--日 星期-</div>
+  </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var timeEl = document.getElementById("time");
-            var dateEl = document.getElementById("date");
-            if (!timeEl || !dateEl) return;
-            function pad(n) { return n.toString().padStart(2, "0"); }
-            function updateTime() {
-                var now = new Date();
-                timeEl.textContent = pad(now.getHours()) + ":" + pad(now.getMinutes()) + ":" + pad(now.getSeconds());
-                dateEl.textContent = now.getFullYear() + "年" + (now.getMonth() + 1) + "月" + now.getDate() + "日 星期" + ["日","一","二","三","四","五","六"][now.getDay()];
-            }
-            updateTime();
-            setInterval(updateTime, 1000);
-        });
-    </script>
+  <div class="quick-links">
+    <a class="quick-link" href="https://test.page.roooooyan.work">
+      <span class="icon">🧪</span>
+      <span class="label">测试</span>
+    </a>
+    <a class="quick-link" href="search">
+      <span class="icon">🔍</span>
+      <span class="label">搜索</span>
+    </a>
+    <a class="quick-link" href="https://game.page.roooooyan.work">
+      <span class="icon">🎮</span>
+      <span class="label">游戏</span>
+    </a>
+    <a class="quick-link" href="http://file-change.page.roooooyan.work/">
+      <span class="icon">📁</span>
+      <span class="label">文件交换</span>
+    </a>
+  </div>
+
+  <div class="footer-links">
+    <a href="info.html">📊 访问信息</a>
+    <a href="feedback.html">💬 意见反馈</a>
+  </div>
+</main>
+
+<footer class="app-footer">
+  <p>&copy; 2013 - <span id="year">2026</span> Yanverse</p>
+</footer>
+
+<script>
+(function() {
+  var timeEl = document.getElementById('time');
+  var dateEl = document.getElementById('date');
+  var greetEl = document.getElementById('greeting');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function getGreeting(h) {
+    if (h < 6) return '夜深了，注意休息 🌙';
+    if (h < 9) return '早上好，新的一天开始了 🌅';
+    if (h < 12) return '上午好，保持专注 ☀️';
+    if (h < 14) return '中午好，记得吃午饭 🍜';
+    if (h < 18) return '下午好，继续加油 ⛅';
+    return '晚上好，放松一下吧 🌆';
+  }
+
+  function update() {
+    var now = new Date();
+    var h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    timeEl.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+    dateEl.textContent = now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日 星期' + ['日','一','二','三','四','五','六'][now.getDay()];
+    if (greetEl) greetEl.textContent = getGreeting(h);
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+  update();
+  setInterval(update, 1000);
+})();
+</script>
 </body>
 </html>
