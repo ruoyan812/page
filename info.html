@@ -1,143 +1,314 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>访问信息 - Yanverse</title>
-    <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        html { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        body {
-            margin: 0;
-            background: #f9fafb;
-            color: #111827;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>访问信息 - Yanverse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .app-header {
-            background: #1f2937;
-            padding: 0 24px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .header-content {
-            max-width: 800px;
-            margin: 0 auto;
-            height: 56px;
-            display: flex;
-            align-items: center;
-        }
-        .brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 1px;
-            cursor: pointer;
-        }
+  :root {
+    --primary: #06b6d4;
+    --primary-dark: #0891b2;
+    --gradient-1: #06b6d4;
+    --gradient-2: #3b82f6;
+    --gradient-3: #8b5cf6;
+    --bg: #f0f4f8;
+    --card-bg: rgba(255,255,255,0.75);
+    --card-border: rgba(255,255,255,0.3);
+    --text: #0f172a;
+    --text-soft: #64748b;
+    --nav-bg: rgba(15,23,42,0.9);
+    --nav-border: rgba(255,255,255,0.08);
+    --footer-bg: rgba(15,23,42,0.95);
+    --shadow: 0 8px 32px rgba(0,0,0,0.06);
+    --radius: 16px;
+    --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  }
 
-        .app-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 24px;
-            min-height: calc(100vh - 156px);
-        }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1120;
+      --card-bg: rgba(30,41,59,0.7);
+      --card-border: rgba(148,163,184,0.15);
+      --text: #f1f5f9;
+      --text-soft: #94a3b8;
+      --nav-bg: rgba(15,23,42,0.95);
+      --footer-bg: rgba(2,6,23,0.98);
+      --shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+  }
 
-        .hero-section {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .hero-section h1 {
-            font-size: 28px;
-            color: #111827;
-            margin: 0;
-            font-weight: 600;
-        }
+  html { font-family: var(--font); color: var(--text); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.4s, color 0.4s;
+  }
 
-        .info-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 24px;
-            border: 1px solid #e5e7eb;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .info-card p {
-            margin: 12px 0;
-            font-size: 14px;
-            color: #374151;
-            line-height: 1.6;
-        }
-        .info-label {
-            font-weight: 500;
-            color: #111827;
-        }
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 20s ease-in-out infinite alternate;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+    top: -120px; left: -80px;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: linear-gradient(135deg, var(--gradient-2), var(--gradient-3));
+    bottom: -100px; right: -60px;
+    animation-delay: -7s;
+  }
+  @keyframes orbFloat {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(30px, -40px) scale(1.08); }
+    66%  { transform: translate(-20px, 20px) scale(0.95); }
+    100% { transform: translate(10px, -10px) scale(1.05); }
+  }
 
-        .app-footer {
-            background: #1f2937;
-            padding: 20px 24px;
-            text-align: center;
-        }
-        .app-footer p {
-            margin: 0;
-            color: #6b7280;
-            font-size: 12px;
-        }
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--nav-border);
+  }
+  .header-content {
+    max-width: 900px;
+    margin: 0 auto;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+  }
+  .brand {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gradient-1), var(--gradient-3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+  }
+  .back-link {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .back-link:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+  }
 
-        @media (max-width: 576px) {
-            .app-header { padding: 0 16px; }
-            .app-content { padding: 16px; }
-            .hero-section h1 { font-size: 22px; }
-        }
-    </style>
+  .app-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    position: relative;
+    z-index: 1;
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-section {
+    text-align: center;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease-out;
+  }
+  .hero-section h1 {
+    font-size: 32px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-soft) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1px;
+  }
+  .hero-section p {
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-top: 6px;
+  }
+
+  .info-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 32px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.6s ease-out 0.1s both;
+    transition: background 0.3s, transform 0.25s, box-shadow 0.25s;
+  }
+  .info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-label {
+    font-size: 13px;
+    color: var(--text-soft);
+    font-weight: 500;
+  }
+  .info-value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 600;
+    font-family: var(--mono);
+    text-align: right;
+    word-break: break-all;
+    max-width: 60%;
+  }
+  .info-value.loading {
+    color: var(--text-soft);
+    font-weight: 400;
+    font-family: var(--font);
+  }
+
+  .app-footer {
+    background: var(--footer-bg);
+    padding: 20px 24px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--nav-border);
+  }
+  .app-footer p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 12px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 576px) {
+    .header-content { padding: 0 16px; }
+    .app-content { padding: 32px 16px 48px; }
+    .info-card { padding: 24px; }
+    .hero-section h1 { font-size: 24px; }
+    .info-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .info-value { text-align: left; max-width: 100%; }
+  }
+</style>
 </head>
 <body>
-    <header class="app-header">
-        <div class="header-content">
-            <span class="brand" onclick="location.href='/'">Yanverse</span>
-        </div>
-    </header>
 
-    <main class="app-content">
-        <div class="hero-section">
-            <h1>你的访问信息</h1>
-        </div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
 
-        <div class="info-card">
-            <p><span class="info-label">IP：</span><span id="ip">正在获取...</span></p>
-            <p><span class="info-label">IP版本：</span><span id="version">正在获取...</span></p>
-            <p><span class="info-label">国家：</span><span id="country">正在获取...</span></p>
-            <div id="ua-info"></div>
-        </div>
-    </main>
+<header class="app-header">
+  <div class="header-content">
+    <span class="brand" onclick="location.href='/'">Yanverse</span>
+    <a class="back-link" href="/">← 返回首页</a>
+  </div>
+</header>
 
-    <footer class="app-footer">
-        <p>&copy; 2013 - 2026 Yanverse</p>
-    </footer>
+<main class="app-content">
+  <div class="hero-section">
+    <h1>你的访问信息</h1>
+    <p>以下是你当前访问 Yanverse 的网络信息</p>
+  </div>
 
-    <script>
-        fetch('https://ipapi.co/json/')
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('ip').innerText = data.ip;
-                document.getElementById('version').innerText = data.version;
-                document.getElementById('country').innerText = data.country_name;
-            })
-            .catch(() => {
-                document.getElementById('ip').innerText = '获取失败';
-                document.getElementById('version').innerText = '获取失败';
-                document.getElementById('country').innerText = '获取失败';
-            });
+  <div class="info-card">
+    <div class="info-row">
+      <span class="info-label">IP 地址</span>
+      <span class="info-value loading" id="ip">获取中...</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">IP 版本</span>
+      <span class="info-value loading" id="version">获取中...</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">所在国家</span>
+      <span class="info-value loading" id="country">获取中...</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">浏览器</span>
+      <span class="info-value loading" id="browser">获取中...</span>
+    </div>
+    <div class="info-row" id="uaRow" style="display:none">
+      <span class="info-label">浏览器版本</span>
+      <span class="info-value loading" id="uaVersion">获取中...</span>
+    </div>
+  </div>
+</main>
 
-        if (navigator.userAgentData) {
-            navigator.userAgentData.getHighEntropyValues(["uaFullVersion"])
-                .then(ua => {
-                    document.getElementById('ua-info').innerHTML =
-                        '<p><span class="info-label">浏览器品牌：</span>' + navigator.userAgentData.brands.map(function(b) { return b.brand; }).join(', ') + '</p>' +
-                        '<p><span class="info-label">浏览器版本：</span>' + ua.uaFullVersion + '</p>';
-                });
-        }
-    </script>
+<footer class="app-footer">
+  <p>&copy; 2013 - <span id="year">2026</span> Yanverse</p>
+</footer>
+
+<script>
+(function() {
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  fetch('https://ipapi.co/json/')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      document.getElementById('ip').textContent = data.ip;
+      document.getElementById('ip').className = 'info-value';
+      document.getElementById('version').textContent = data.version;
+      document.getElementById('version').className = 'info-value';
+      document.getElementById('country').textContent = data.country_name;
+      document.getElementById('country').className = 'info-value';
+    })
+    .catch(function() {
+      var fallback = '获取失败';
+      document.getElementById('ip').textContent = fallback;
+      document.getElementById('version').textContent = fallback;
+      document.getElementById('country').textContent = fallback;
+    });
+
+  if (navigator.userAgentData) {
+    navigator.userAgentData.getHighEntropyValues(['uaFullVersion']).then(function(ua) {
+      var brands = navigator.userAgentData.brands.map(function(b) { return b.brand; }).join(', ');
+      document.getElementById('browser').textContent = brands;
+      document.getElementById('browser').className = 'info-value';
+      document.getElementById('uaRow').style.display = 'flex';
+      document.getElementById('uaVersion').textContent = ua.uaFullVersion;
+      document.getElementById('uaVersion').className = 'info-value';
+    });
+  } else {
+    var raw = navigator.userAgent;
+    var match = raw.match(/(Chrome\/[\d.]+|Firefox\/[\d.]+|Safari\/[\d.]+)/);
+    document.getElementById('browser').textContent = match ? match[1] : raw.slice(0, 50);
+    document.getElementById('browser').className = 'info-value';
+  }
+})();
+</script>
 </body>
 </html>
