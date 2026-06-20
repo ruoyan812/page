@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>历史上的今天 - Yanverse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--primary:#06b6d4;
+--primary-dark:#0891b2;
+--gradient-1:#06b6d4;
+--gradient-2:#3b82f6;
+--gradient-3:#8b5cf6;
+--bg:#f0f4f8;
+--card-bg:rgba(255,255,255,0.75);
+--card-border:rgba(255,255,255,0.3);
+--text:#0f172a;
+--text-soft:#64748b;
+--nav-bg:rgba(15,23,42,0.9);
+--nav-border:rgba(255,255,255,0.08);
+--footer-bg:rgba(15,23,42,0.95);
+--shadow:0 8px 32px rgba(0,0,0,0.06);
+--radius:16px;
+--font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+--mono:"JetBrains Mono","SF Mono",ui-monospace,monospace
+}
+
+@media(prefers-color-scheme:dark){
+:root{
+--bg:#0b1120;
+--card-bg:rgba(30,41,59,0.7);
+--card-border:rgba(148,163,184,0.15);
+--text:#f1f5f9;
+--text-soft:#94a3b8;
+--nav-bg:rgba(15,23,42,0.95);
+--footer-bg:rgba(2,6,23,0.98);
+--shadow:0 8px 32px rgba(0,0,0,0.3)
+}
+}
+
+html{font-family:var(--font);color:var(--text)}
+body{margin:0;background:var(--bg);min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s}
+
+.orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:.25;pointer-events:none;z-index:0;animation:orbFloat 20s ease-in-out infinite alternate}
+.orb-1{width:500px;height:500px;background:linear-gradient(135deg,var(--gradient-1),var(--gradient-2));top:-120px;left:-80px}
+.orb-2{width:400px;height:400px;background:linear-gradient(135deg,var(--gradient-2),var(--gradient-3));bottom:-100px;right:-60px;animation-delay:-7s}
+.orb-3{width:300px;height:300px;background:linear-gradient(135deg,var(--gradient-3),var(--gradient-1));top:50%;left:60%;animation-delay:-14s;opacity:.15}
+@keyframes orbFloat{0%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.08)}66%{transform:translate(-20px,20px) scale(.95)}100%{transform:translate(10px,-10px) scale(1.05)}}
+
+.app-header{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--nav-border);transition:background .3s}
+.header-content{max-width:900px;margin:0 auto;height:60px;display:flex;align-items:center;padding:0 24px}
+.brand{font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--gradient-1),var(--gradient-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1.5px;cursor:pointer}
+
+.app-content{max-width:900px;margin:0 auto;padding:36px 24px 64px;position:relative;z-index:1}
+
+.page-header{text-align:center;margin-bottom:24px;animation:fadeUp .6s ease-out}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-title span{background:linear-gradient(135deg,var(--text) 0%,var(--text-soft) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.date-picker-card{background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:var(--radius);padding:16px 24px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;gap:16px;max-width:400px;margin:0 auto 24px;animation:fadeUp .6s ease-out .05s both;transition:background .3s}
+.date-picker-card label{font-size:14px;color:var(--text-soft);white-space:nowrap}
+.date-picker-card input[type=date]{font-family:var(--font);font-size:14px;padding:6px 12px;border-radius:8px;border:1px solid var(--card-border);background:var(--bg);color:var(--text);outline:none;transition:border-color .2s}
+.date-picker-card input[type=date]:focus{border-color:var(--primary)}
+.date-picker-card button{background:var(--primary);border:none;color:#fff;padding:7px 18px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;transition:background .2s}
+.date-picker-card button:hover{background:var(--primary-dark)}
+
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:24px;animation:fadeUp .6s ease-out .1s both}
+.tab{padding:8px 20px;border-radius:8px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text-soft);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;backdrop-filter:blur(12px)}
+.tab:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+.loading{text-align:center;padding:80px 20px}
+.loading .spinner{width:48px;height:48px;border:4px solid var(--card-border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{font-size:16px;color:var(--text-soft)}
+
+.error-card{background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:var(--radius);padding:40px;text-align:center;box-shadow:var(--shadow)}
+.error-card p{color:var(--text-soft);margin-bottom:12px}
+.error-card .err-detail{font-size:12px;opacity:.6;margin-bottom:16px;line-height:1.6}
+.error-card button{background:var(--primary);border:none;color:#fff;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:14px;transition:background .2s}
+.error-card button:hover{background:var(--primary-dark)}
+
+.events-list{animation:fadeUp .6s ease-out .15s both}
+.event-card{background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:var(--radius);padding:20px 24px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s,background .3s;margin-bottom:10px}
+.event-card:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(0,0,0,.1)}
+.event-year{font-family:var(--mono);font-size:13px;font-weight:700;background:linear-gradient(135deg,var(--gradient-1),var(--gradient-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.event-text{font-size:15px;line-height:1.6;color:var(--text)}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-soft);font-size:15px}
+
+.app-footer{background:var(--footer-bg);padding:20px 24px;text-align:center;position:relative;z-index:1;border-top:1px solid var(--nav-border);margin-top:48px}
+.app-footer p{margin:0;color:var(--text-soft);font-size:12px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:576px){
+.header-content{padding:0 16px}
+.app-content{padding:24px 16px 40px}
+.page-title{font-size:22px}
+.event-card{padding:16px 18px}
+.tab{padding:6px 14px;font-size:13px}
+.date-picker-card{flex-wrap:wrap;padding:14px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<header class="app-header">
+  <div class="header-content">
+    <span class="brand" onclick="location.href='https://www.page.roooooyan.work'">Yanverse</span>
+  </div>
+</header>
+
+<main class="app-content">
+  <div class="page-header">
+    <div class="page-title"><span>历史上的今天</span></div>
+  </div>
+
+  <div class="date-picker-card">
+    <label>选择日期</label>
+    <select id="monthPicker" style="font-family:var(--font);font-size:14px;padding:6px 12px;border-radius:8px;border:1px solid var(--card-border);background:var(--bg);color:var(--text);outline:none;cursor:pointer"></select>
+    <span style="color:var(--text-soft);font-size:14px">月</span>
+    <select id="dayPicker" style="font-family:var(--font);font-size:14px;padding:6px 12px;border-radius:8px;border:1px solid var(--card-border);background:var(--bg);color:var(--text);outline:none;cursor:pointer"></select>
+    <span style="color:var(--text-soft);font-size:14px">日</span>
+    <button onclick="goDate()">查看</button>
+  </div>
+
+  <div class="tabs">
+    <span class="tab active" data-tab="events" onclick="switchTab('events')">大事记</span>
+    <span class="tab" data-tab="births" onclick="switchTab('births')">出生</span>
+    <span class="tab" data-tab="deaths" onclick="switchTab('deaths')">逝世</span>
+  </div>
+
+  <div id="app">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>正在获取历史数据...</p>
+    </div>
+  </div>
+</main>
+
+<footer class="app-footer">
+  <p>&copy; 2013 - <span id="year">2026</span> Yanverse · 历史上的今天 · 数据来源：Wikipedia</p>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const MONTHS = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+const monthSel = document.getElementById('monthPicker');
+const daySel = document.getElementById('dayPicker');
+
+MONTHS.forEach((m, i) => {
+  const opt = document.createElement('option');
+  opt.value = m;
+  opt.textContent = (i + 1) + '月';
+  monthSel.appendChild(opt);
+});
+
+function populateDays(month, selectedDay) {
+  const daysInMonth = new Date(2000, month, 0).getDate();
+  daySel.innerHTML = '';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const opt = document.createElement('option');
+    opt.value = String(d).padStart(2, '0');
+    opt.textContent = d + '日';
+    if (String(d).padStart(2, '0') === selectedDay) opt.selected = true;
+    daySel.appendChild(opt);
+  }
+}
+
+const today = new Date();
+const defaultMonth = String(today.getMonth() + 1);
+const defaultDay = String(today.getDate()).padStart(2, '0');
+monthSel.value = defaultMonth;
+populateDays(parseInt(defaultMonth), defaultDay);
+
+monthSel.addEventListener('change', function() {
+  const curDay = daySel.value;
+  populateDays(parseInt(this.value), curDay);
+});
+
+let allData = {};
+let currentTab = 'events';
+let curMonth = defaultMonth;
+let curDay = defaultDay;
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  renderTab(tab);
+}
+
+function goDate() {
+  curMonth = String(monthSel.value).padStart(2, '0');
+  curDay = daySel.value;
+  document.getElementById('app').innerHTML = '<div class="loading"><div class="spinner"></div><p>正在获取历史数据...</p></div>';
+  init();
+}
+
+async function init() {
+  const app = document.getElementById('app');
+  try {
+    const base = 'https://zh.wikipedia.org/api/rest_v1/feed/onthisday/';
+    const [er, br, dr] = await Promise.all([
+      fetch(base + 'events/' + curMonth + '/' + curDay),
+      fetch(base + 'births/' + curMonth + '/' + curDay),
+      fetch(base + 'deaths/' + curMonth + '/' + curDay)
+    ]);
+    allData = {
+      events: (await er.json()).events || [],
+      births: (await br.json()).births || [],
+      deaths: (await dr.json()).deaths || []
+    };
+    renderTab(currentTab);
+  } catch (e) {
+    app.innerHTML = '<div class="error-card"><p>获取数据失败</p><p class="err-detail">' + e.message + '<br><br>请检查网络后重试</p><button onclick="init()">重新加载</button></div>';
+  }
+}
+
+const HOLIDAYS = {
+  '01-01': { name: '元旦', emoji: '🎉', customs: '元旦是一年的开始，人们会举办跨年晚会、燃放烟花、互送祝福，许多地方有元旦长跑和登高活动，象征新年新气象。' },
+  '01-05': { name: '小寒', emoji: '❄️', customs: '小寒是二十四节气之一，标志着开始进入一年中最寒冷的日子。民间有"小寒胜大寒"的说法，此时宜进补，多吃温热食物。' },
+  '01-20': { name: '大寒', emoji: '❄️', customs: '大寒是二十四节气的最后一个节气，也是一年中最冷的时期。民间有大寒吃糯米饭、喝腊八粥的习俗，寓意驱寒保暖。' },
+  '02-02': { name: '世界湿地日', emoji: '🌿', customs: '为提高公众对湿地保护的认识而设立。各地会举办湿地科普展览、观鸟活动和生态保护宣传。' },
+  '02-04': { name: '立春', emoji: '🌱', customs: '立春是二十四节气之首，标志着春季的开始。民间有"咬春"习俗，吃春饼、春卷、萝卜，寓意迎新纳吉。' },
+  '02-14': { name: '情人节', emoji: '💕', customs: '起源于西方的节日，情侣们互赠巧克力、鲜花（尤其是玫瑰）和贺卡，共进浪漫晚餐表达爱意。' },
+  '03-08': { name: '国际妇女节', emoji: '🌹', customs: '为庆祝妇女在经济、政治和社会等领域做出的重要贡献而设立。各单位常为女性职工放假半天、赠送鲜花或组织活动。' },
+  '03-12': { name: '植树节', emoji: '🌳', customs: '为激发人们爱林造林的热情、促进国土绿化而设立。各地组织义务植树活动，倡导绿色环保理念。' },
+  '03-20': { name: '春分', emoji: '🌸', customs: '春分日昼夜等长，标志着春天过半。民间有"春分竖蛋"的习俗，人们尝试将鸡蛋竖立起来，寓意好运。' },
+  '04-01': { name: '愚人节', emoji: '🤪', customs: '源自西方的节日，人们在这一天可以开玩笑、恶作剧捉弄别人，被捉弄的人被称为"四月傻瓜"。玩笑通常在中午12点前结束。' },
+  '04-04': { name: '清明', emoji: '🌧️', customs: '清明节是祭祖和扫墓的日子，人们前往墓地祭拜先人、献花、烧纸钱。同时也是踏青郊游的好时节，有吃青团、放风筝的习俗。' },
+  '04-05': { name: '清明', emoji: '🌧️', customs: '清明节是祭祖和扫墓的日子，人们前往墓地祭拜先人、献花、烧纸钱。同时也是踏青郊游的好时节，有吃青团、放风筝的习俗。' },
+  '04-22': { name: '世界地球日', emoji: '🌍', customs: '旨在提高民众对于现有环境问题的意识，动员民众参与环保运动。各地举办垃圾分类宣传、植树净滩等公益活动。' },
+  '05-01': { name: '劳动节', emoji: '💪', customs: '国际劳动节，源于美国芝加哥工人大罢工。中国通常放假调休，人们趁小长假外出旅游、休息放松。' },
+  '05-04': { name: '青年节', emoji: '🌟', customs: '纪念1919年五四爱国运动。各地举办青年表彰大会、主题团日活动，弘扬爱国、进步、民主、科学的五四精神。' },
+  '05-05': { name: '立夏', emoji: '☀️', customs: '立夏标志着夏季的开始。民间有"立夏吃蛋"的习俗，认为吃蛋能强身健体。还有"称人"习俗，称体重以观察夏季身体变化。' },
+  '05-12': { name: '国际护士节', emoji: '💉', customs: '为纪念现代护理学科创始人弗洛伦斯·南丁格尔而设立。表彰护士在医疗工作中的奉献精神。' },
+  '06-01': { name: '儿童节', emoji: '🧒', customs: '为保障儿童权益而设立的节日。学校举办文艺汇演、游园活动，家长给孩子送礼物，带孩子去游乐园玩耍。' },
+  '06-05': { name: '世界环境日', emoji: '🌿', customs: '联合国为促进全球环保意识而设立。各国举办环保宣传活动，倡导减少污染、保护生物多样性。' },
+  '06-21': { name: '夏至', emoji: '☀️', customs: '夏至是一年中白昼最长的一天。民间有"冬至饺子夏至面"的说法，夏至吃面是许多地区的传统习俗。' },
+  '07-01': { name: '建党节', emoji: '🚩', customs: '纪念中国共产党成立。各地举办重温入党誓词、红色主题展览、表彰优秀党员等活动。' },
+  '08-01': { name: '建军节', emoji: '🎖️', customs: '纪念中国人民解放军成立。各地举办拥军优属活动、军事主题展览，部分军事基地向公众开放参观。' },
+  '08-07': { name: '立秋', emoji: '🍂', customs: '立秋标志着秋季的开始。民间有"贴秋膘"的习俗，人们吃炖肉、烤肉等补充营养。还有"咬秋"吃西瓜的习俗。' },
+  '09-10': { name: '教师节', emoji: '🍎', customs: '为表达对教师的尊敬而设立。学生向老师赠送鲜花、贺卡，学校举办表彰大会，弘扬尊师重教的传统美德。' },
+  '09-22': { name: '秋分', emoji: '🍁', customs: '秋分日昼夜等长，标志着秋季过半。民间有"秋分祭月"的传统，也是中国农民丰收节，庆祝农业丰收。' },
+  '10-01': { name: '国庆节', emoji: '🇨🇳', customs: '纪念中华人民共和国成立。天安门广场举行升旗仪式，各地悬挂国旗、举办烟花晚会和文艺演出，国庆长假期间全民出游。' },
+  '10-08': { name: '寒露', emoji: '🌾', customs: '寒露是深秋的节气，气温下降明显。民间有寒露吃芝麻、喝菊花酒的习俗，注重滋阴润燥。' },
+  '10-24': { name: '霜降', emoji: '❄️', customs: '霜降是秋季最后一个节气，开始有霜冻。民间有霜降吃柿子的习俗，认为此时柿子最甜且能御寒保暖。' },
+  '10-31': { name: '万圣节', emoji: '🎃', customs: '源自西方的传统节日。人们装扮成鬼怪精灵，孩子们挨家挨户敲门要糖果（Trick-or-treat），家庭制作南瓜灯装饰。' },
+  '11-08': { name: '立冬', emoji: '❄️', customs: '立冬标志着冬季的开始。民间有"立冬补冬"的习俗，北方吃饺子，南方吃鸡鸭鱼肉等温补食物。' },
+  '11-22': { name: '小雪', emoji: '🌨️', customs: '小雪节气开始降雪但雪量不大。民间有腌制腊肉、酸菜的习俗，为过冬做准备。' },
+  '12-07': { name: '大雪', emoji: '🌨️', customs: '大雪节气气温显著下降、降雪量增大。民间有"大雪腌肉"的习俗，此时腌制肉类不易变质。' },
+  '12-21': { name: '冬至', emoji: '🥟', customs: '冬至是一年中白昼最短的一天。北方有"冬至吃饺子"的习俗，南方吃汤圆，寓意团圆温暖。民间有"冬至大如年"的说法。' },
+  '12-24': { name: '平安夜', emoji: '🎄', customs: '圣诞节前夜，人们装饰圣诞树、互赠苹果（寓意平安），家庭聚餐、去教堂参加平安夜弥撒。' },
+  '12-25': { name: '圣诞节', emoji: '🎅', customs: '纪念耶稣诞生的西方传统节日。人们互赠礼物、装饰圣诞树、吃圣诞大餐，是全家团聚的日子。' },
+  '12-31': { name: '跨年夜', emoji: '🎆', customs: '一年的最后一天，人们举办跨年派对、观看跨年晚会，在零点时刻倒数计时、燃放烟花，互祝新年快乐。' }
+};
+
+function pickOne(items) {
+  if (!items || !items.length) return null;
+
+  const preferred = items.filter(i => i.pages && i.pages.length > 1);
+  if (preferred.length) return preferred[0];
+
+  return items[0];
+}
+
+function renderTab(tab) {
+  const app = document.getElementById('app');
+  const items = allData[tab] || [];
+
+  if (!items.length) {
+    app.innerHTML = '<div class="empty-state">暂无数据</div>';
+    return;
+  }
+
+  const holidayKey = curMonth + '-' + curDay;
+  const holiday = HOLIDAYS[holidayKey];
+
+  const centuryMap = {};
+  items.forEach(item => {
+    const year = parseInt(item.year) || 0;
+    const centuryKey = Math.floor(year / 100);
+    if (!centuryMap[centuryKey]) centuryMap[centuryKey] = [];
+    centuryMap[centuryKey].push(item);
+  });
+
+  const sortedCenturies = Object.keys(centuryMap).map(Number).sort((a, b) => b - a);
+
+  const picked = [];
+  sortedCenturies.forEach(ck => {
+    const best = pickOne(centuryMap[ck]);
+    if (best) picked.push(best);
+  });
+
+  let html = '<div class="events-list">';
+
+  if (holiday) {
+    html += '<div style="background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:16px">';
+    html += '<div style="font-size:28px;margin-bottom:8px">' + holiday.emoji + ' <span style="font-size:22px;font-weight:700">' + holiday.name + '</span></div>';
+    html += '<div style="font-size:14px;line-height:1.7;color:var(--text-soft)">' + holiday.customs + '</div>';
+    html += '</div>';
+  }
+
+  picked.forEach(item => {
+    const nameMatch = item.text.match(/^[^，,（(]+/);
+    const name = nameMatch ? nameMatch[0].trim() : '';
+    if (tab === 'deaths') {
+      html += '<div class="event-card">';
+      html += '<div class="event-year">' + item.year + '年</div>';
+      html += '<div class="event-text" style="margin-bottom:10px">' + item.text + '</div>';
+      html += '<div style="font-size:14px;color:var(--text-soft);border-top:1px solid var(--card-border);padding-top:10px;line-height:1.6">🕯️ 缅怀 <strong>' + (name || item.text.slice(0,20)) + '</strong>，其贡献与精神将被铭记。</div>';
+      html += '</div>';
+    } else {
+      html += '<div class="event-card"><div class="event-year">' + item.year + '年</div><div class="event-text">' + item.text + '</div></div>';
+    }
+  });
+  html += '</div>';
+  app.innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>
