@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -64,8 +65,8 @@ body{margin:0;background:var(--bg);min-height:100vh;overflow-x:hidden;transition
 
 .date-picker-card{background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:var(--radius);padding:16px 24px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;gap:16px;max-width:400px;margin:0 auto 24px;animation:fadeUp .6s ease-out .05s both;transition:background .3s}
 .date-picker-card label{font-size:14px;color:var(--text-soft);white-space:nowrap}
-.date-picker-card input[type=date]{font-family:var(--font);font-size:14px;padding:6px 12px;border-radius:8px;border:1px solid var(--card-border);background:var(--bg);color:var(--text);outline:none;transition:border-color .2s}
-.date-picker-card input[type=date]:focus{border-color:var(--primary)}
+.date-picker-card select{font-family:var(--font);font-size:14px;padding:6px 12px;border-radius:8px;border:1px solid var(--card-border);background:var(--bg);color:var(--text);outline:none;cursor:pointer}
+.date-picker-card select:focus{border-color:var(--primary)}
 .date-picker-card button{background:var(--primary);border:none;color:#fff;padding:7px 18px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;transition:background .2s}
 .date-picker-card button:hover{background:var(--primary-dark)}
 
@@ -92,6 +93,8 @@ body{margin:0;background:var(--bg);min-height:100vh;overflow-x:hidden;transition
 .event-text{font-size:15px;line-height:1.6;color:var(--text)}
 
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-soft);font-size:15px}
+
+.today-badge{display:inline-block;background:var(--primary);color:#fff;font-size:11px;padding:2px 10px;border-radius:10px;margin-left:8px;vertical-align:middle}
 
 .app-footer{background:var(--footer-bg);padding:20px 24px;text-align:center;position:relative;z-index:1;border-top:1px solid var(--nav-border);margin-top:48px}
 .app-footer p{margin:0;color:var(--text-soft);font-size:12px}
@@ -149,7 +152,7 @@ body{margin:0;background:var(--bg);min-height:100vh;overflow-x:hidden;transition
 </main>
 
 <footer class="app-footer">
-  <p>&copy; 2013 - <span id="year">2026</span> Yanverse · 历史上的今天 · 数据来源：Wikipedia</p>
+  <p>&copy; 2013 - <span id="year">2026</span> Yanverse · 历史上的今天 · 数据来源：百度百科</p>
 </footer>
 
 <script>
@@ -193,6 +196,11 @@ let allData = {};
 let currentTab = 'events';
 let curMonth = defaultMonth;
 let curDay = defaultDay;
+let isToday = true;
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function getDateStr(m, d) { return pad(m) + '-' + pad(d); }
 
 function switchTab(tab) {
   currentTab = tab;
@@ -203,24 +211,57 @@ function switchTab(tab) {
 function goDate() {
   curMonth = String(monthSel.value).padStart(2, '0');
   curDay = daySel.value;
+  isToday = (curMonth === pad(today.getMonth() + 1) && curDay === pad(today.getDate()));
   document.getElementById('app').innerHTML = '<div class="loading"><div class="spinner"></div><p>正在获取历史数据...</p></div>';
   init();
+}
+
+function classifyByTitle(title) {
+  const deathKw = ['逝世', '病逝', '遇害', '殉职', '牺牲', '被杀', '去世', '永逝'];
+  const birthKw = ['诞辰', '出生'];
+  for (const kw of deathKw) {
+    if (title.includes(kw)) return 'deaths';
+  }
+  for (const kw of birthKw) {
+    if (title.includes(kw)) {
+      if (title.includes('计算机') || title.includes('欧元')) continue;
+      return 'births';
+    }
+  }
+  return 'events';
 }
 
 async function init() {
   const app = document.getElementById('app');
   try {
-    const base = 'https://zh.wikipedia.org/api/rest_v1/feed/onthisday/';
-    const [er, br, dr] = await Promise.all([
-      fetch(base + 'events/' + curMonth + '/' + curDay),
-      fetch(base + 'births/' + curMonth + '/' + curDay),
-      fetch(base + 'deaths/' + curMonth + '/' + curDay)
-    ]);
-    allData = {
-      events: (await er.json()).events || [],
-      births: (await br.json()).births || [],
-      deaths: (await dr.json()).deaths || []
-    };
+    const dateStr = curMonth + curDay;
+
+    if (isToday) {
+      const res = await fetch('https://api.chinasclm.com/api/api-history');
+      const json = await res.json();
+      if (json.code !== 200 || !json.data) {
+        throw new Error('草木API返回异常');
+      }
+      allData = { events: [], births: [], deaths: [] };
+      json.data.forEach(item => {
+        const map = { event: 'events', birth: 'births', death: 'deaths' };
+        const type = map[item.type] || 'events';
+        const year = item.year || '';
+        allData[type].push({ year: year, text: item.title, desc: item.desc || '', link: item.link || '' });
+      });
+    } else {
+      const res = await fetch('https://api.qqsuu.cn/api/dm-lishi?date=' + dateStr);
+      const json = await res.json();
+      if (json.code !== 200 || !json.data || !json.data.list) {
+        throw new Error('大米API返回异常');
+      }
+      allData = { events: [], births: [], deaths: [] };
+      json.data.list.forEach(item => {
+        const year = item.lsdate.split('-')[0] || '';
+        const type = classifyByTitle(item.title);
+        allData[type].push({ year: year, text: item.title });
+      });
+    }
     renderTab(currentTab);
   } catch (e) {
     app.innerHTML = '<div class="error-card"><p>获取数据失败</p><p class="err-detail">' + e.message + '<br><br>请检查网络后重试</p><button onclick="init()">重新加载</button></div>';
@@ -266,13 +307,9 @@ const HOLIDAYS = {
   '12-31': { name: '跨年夜', emoji: '🎆', customs: '一年的最后一天，人们举办跨年派对、观看跨年晚会，在零点时刻倒数计时、燃放烟花，互祝新年快乐。' }
 };
 
-function pickOne(items) {
-  if (!items || !items.length) return null;
-
-  const preferred = items.filter(i => i.pages && i.pages.length > 1);
-  if (preferred.length) return preferred[0];
-
-  return items[0];
+function pickRandom(arr) {
+  if (!arr || !arr.length) return null;
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function renderTab(tab) {
@@ -299,7 +336,7 @@ function renderTab(tab) {
 
   const picked = [];
   sortedCenturies.forEach(ck => {
-    const best = pickOne(centuryMap[ck]);
+    const best = pickRandom(centuryMap[ck]);
     if (best) picked.push(best);
   });
 
@@ -315,15 +352,18 @@ function renderTab(tab) {
   picked.forEach(item => {
     const nameMatch = item.text.match(/^[^，,（(]+/);
     const name = nameMatch ? nameMatch[0].trim() : '';
+    html += '<div class="event-card">';
+    html += '<div class="event-year">' + item.year + '年</div>';
     if (tab === 'deaths') {
-      html += '<div class="event-card">';
-      html += '<div class="event-year">' + item.year + '年</div>';
       html += '<div class="event-text" style="margin-bottom:10px">' + item.text + '</div>';
-      html += '<div style="font-size:14px;color:var(--text-soft);border-top:1px solid var(--card-border);padding-top:10px;line-height:1.6">🕯️ 缅怀 <strong>' + (name || item.text.slice(0,20)) + '</strong></div>';
-      html += '</div>';
+      html += '<div style="font-size:14px;color:var(--text-soft);border-top:1px solid var(--card-border);padding-top:10px;line-height:1.6">🕯️ 缅怀 <strong>' + (name || item.text.slice(0, 20)) + '</strong></div>';
     } else {
-      html += '<div class="event-card"><div class="event-year">' + item.year + '年</div><div class="event-text">' + item.text + '</div></div>';
+      html += '<div class="event-text">' + item.text + '</div>';
     }
+    if (item.desc) {
+      html += '<div style="font-size:13px;color:var(--text-soft);margin-top:8px;line-height:1.5;border-top:1px solid var(--card-border);padding-top:8px">' + item.desc + '</div>';
+    }
+    html += '</div>';
   });
   html += '</div>';
   app.innerHTML = html;
