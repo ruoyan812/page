@@ -44,8 +44,8 @@
 }
 }
 
-html{font-family:var(--font);color:var(--text)}
-body{margin:0;background:var(--bg);min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s}
+html{font-family:var(--font);color:var(--text);height:100%}
+body{margin:0;background:var(--bg);min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s;display:flex;flex-direction:column}
 
 .orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:.25;pointer-events:none;z-index:0;animation:orbFloat 20s ease-in-out infinite alternate}
 .orb-1{width:500px;height:500px;background:linear-gradient(135deg,var(--gradient-1),var(--gradient-2));top:-120px;left:-80px}
@@ -57,7 +57,7 @@ body{margin:0;background:var(--bg);min-height:100vh;overflow-x:hidden;transition
 .header-content{max-width:900px;margin:0 auto;height:60px;display:flex;align-items:center;padding:0 24px}
 .brand{font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--gradient-1),var(--gradient-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1.5px;cursor:pointer}
 
-.app-content{max-width:900px;margin:0 auto;padding:36px 24px 64px;position:relative;z-index:1}
+.app-content{max-width:900px;margin:0 auto;padding:36px 24px;position:relative;z-index:1;flex:1 0 auto}
 
 .page-header{text-align:center;margin-bottom:24px;animation:fadeUp .6s ease-out}
 .page-title{font-size:28px;font-weight:700;margin-bottom:4px}
@@ -94,7 +94,7 @@ body{margin:0;background:var(--bg);min-height:100vh;overflow-x:hidden;transition
 
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-soft);font-size:15px}
 
-.today-badge{display:inline-block;background:var(--primary);color:#fff;font-size:11px;padding:2px 10px;border-radius:10px;margin-left:8px;vertical-align:middle}
+.app-footer{background:var(--footer-bg);padding:20px 24px;text-align:center;position:relative;z-index:1;border-top:1px solid var(--nav-border);margin-top:auto}
 
 .app-footer{background:var(--footer-bg);padding:20px 24px;text-align:center;position:relative;z-index:1;border-top:1px solid var(--nav-border);margin-top:48px}
 .app-footer p{margin:0;color:var(--text-soft);font-size:12px}
