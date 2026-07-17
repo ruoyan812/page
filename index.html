@@ -366,38 +366,62 @@
   </ul>
 </div>
 
-<!-- translate.js -->
 <script src="https://cdn.staticfile.net/translate.js/3.12.0/translate.js"></script>
 <script>
-  /* 基础配置 */
+  /* ========= 基础配置（只执行一次） ========= */
   translate.language.setLocal('chinese_simplified');
   translate.service.use('client.edge');
+  translate.execute();
 
   const label = document.getElementById('lang-label');
   const menu = document.getElementById('lang-menu');
 
-  // 显示 / 隐藏菜单
+  /* ========= 下拉菜单显示/隐藏 ========= */
   label.addEventListener('click', function (e) {
     e.stopPropagation();
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
   });
 
-  // 点击空白关闭
   document.addEventListener('click', function () {
     menu.style.display = 'none';
   });
 
-  // 选择语言
+  /* ========= 语言切换（核心：防抖 + 记忆） ========= */
+  let translating = false; // 防重复触发锁
+
   menu.querySelectorAll('li').forEach(function (item) {
     item.addEventListener('click', function () {
-      const lang = this.getAttribute('data-lang');
-      translate.changeLanguage(lang);
-      translate.execute();
+      if (translating) return; // 防抖：正在翻译则忽略
+      translating = true;
 
-      // 可选：更新显示文字
+      const lang = this.getAttribute('data-lang');
+
+      // 1. 清空旧翻译状态（防止弹回）
+      translate.reset();
+
+      // 2. 切换语言
+      translate.changeLanguage(lang);
+
+      // 3. 记忆语言（刷新后仍生效）
+      localStorage.setItem('site_lang', lang);
+
       label.innerHTML = '🌐 TRANS ▾';
       menu.style.display = 'none';
+
+      // 4. 解锁（给翻译留一点时间）
+      setTimeout(() => {
+        translating = false;
+      }, 600);
     });
+  });
+
+  /* ========= 页面加载时恢复语言 ========= */
+  window.addEventListener('DOMContentLoaded', function () {
+    const savedLang = localStorage.getItem('site_lang');
+    if (savedLang) {
+      translate.reset();
+      translate.changeLanguage(savedLang);
+    }
   });
 </script>
     </nav>
