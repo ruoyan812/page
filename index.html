@@ -342,73 +342,6 @@
       <a href="http://file-change.page.roooooyan.work/">文件类型转换（维护中）</a>
       <a href="sdsz">实验加油-头像制作</a>
       <a href="https://mail.roooooyan.work">Mail</a>
-     <!-- 语言选择器 -->
-     <div class="lang-select">
-  <span id="lang-label">🌐 TRANS ▾</span>
-  <ul id="lang-menu">
-    <li data-lang="en">🇺🇸 English</li>
-    <li data-lang="de">🇩🇪 Deutsch</li>
-    <li data-lang="ja">🇯🇵 日本語</li>
-  </ul>
-</div>
-
-<h1 data-i18n>欢迎来到我的网站</h1>
-<p data-i18n>这是一个示例描述。</p>
-<button data-i18n>点击查看详情</button>
-
-<script>
-const label = document.getElementById('lang-label');
-const menu = document.getElementById('lang-menu');
-
-label.onclick = e => {
-  e.stopPropagation();
-  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-};
-document.onclick = () => menu.style.display = 'none';
-
-/* ✅ 模拟翻译接口（后期可替换为 DeepL / GPT） */
-async function fetchTranslation(text, lang) {
-  // 这里只是示例，实际你会调用真实 API
-  const fakeDB = {
-    en: { "欢迎来到我的网站": "Welcome to my website", "这是一个示例描述。": "This is a sample description.", "点击查看详情": "View Details" },
-    de: { "欢迎来到我的网站": "Willkommen auf meiner Website", "这是一个示例描述。": "Dies ist eine Beispielbeschreibung.", "点击查看详情": "Details anzeigen" },
-    ja: { "欢迎来到我的网站": "私のウェブサイトへようこそ", "这是一个示例描述。": "これはサンプルの説明です。", "点击查看详情": "詳細を見る" }
-  };
-  return fakeDB[lang][text] || text;
-}
-
-/* ✅ 主翻译逻辑 */
-async function translatePage(lang) {
-  localStorage.setItem("site_lang", lang);
-  label.textContent = "🌐 Translating...";
-
-  const nodes = document.querySelectorAll('[data-i18n]');
-
-  for (const node of nodes) {
-    const original = node.textContent.trim();
-    const cacheKey = lang + "|" + original;
-
-    let translated = localStorage.getItem(cacheKey);
-    if (!translated) {
-      translated = await fetchTranslation(original, lang);
-      localStorage.setItem(cacheKey, translated);
-    }
-    node.textContent = translated;
-  }
-
-  label.textContent = "🌐 TRANS ▾";
-}
-
-menu.querySelectorAll("li").forEach(li => {
-  li.onclick = () => translatePage(li.dataset.lang);
-});
-
-/* ✅ 页面加载恢复 */
-window.onload = () => {
-  const lang = localStorage.getItem("site_lang");
-  if (lang) translatePage(lang);
-};
-</script>
     </nav>
   </div>
 </header>
@@ -442,7 +375,7 @@ window.onload = () => {
     </a>
     <a class="quick-link" href="https://mzbj.roooooyan.work">
       <span class="icon"><img src="https://pan.page.roooooyan.work/file/1781940953079_maozai.png" width="40px" height="40px"></span>
-      <span class="label">猫仔（试运行）</span>
+      <span class="label">Catlize（试运行）</span>
     </a>
     <a class="quick-link" href="weather">
       <span class="icon">☀️</span>
