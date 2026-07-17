@@ -321,6 +321,11 @@
     .quick-links { grid-template-columns: repeat(2, 1fr); }
     .nav-links a { font-size: 12px; padding: 5px 8px; }
   }
+ .lang-select { position: relative; display: inline-block; }
+  #lang-label { cursor: pointer; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; }
+  #lang-menu { position: absolute; right: 0; top: 110%; display: none; background: #fff; border: 1px solid #ddd; border-radius: 4px; min-width: 150px; z-index: 9999; }
+  #lang-menu li { padding: 8px 14px; cursor: pointer; }
+  #lang-menu li:hover { background: #f5f5f5; }
 </style>
 </head>
 <body>
@@ -338,91 +343,71 @@
       <a href="sdsz">实验加油-头像制作</a>
       <a href="https://mail.roooooyan.work">Mail</a>
      <!-- 语言选择器 -->
-<div class="lang-select" style="position:relative; display:inline-block;">
-  <span id="lang-label" style="cursor:pointer;">🌐 TRANS ▾</span>
-  <ul id="lang-menu"
-      style="
-        position:absolute;
-        right:0;
-        top:100%;
-        display:none;
-        background:#fff;
-        border:1px solid #ddd;
-        list-style:none;
-        padding:4px 0;
-        margin:0;
-        min-width:140px;
-        z-index:9999;
-        font-size:14px;
-      ">
-    <li data-lang="chinese_simplified" style="padding:6px 12px;cursor:pointer;">🇨🇳 中文</li>
-    <li data-lang="english" style="padding:6px 12px;cursor:pointer;">🇺🇸 English</li>
-    <li data-lang="japanese" style="padding:6px 12px;cursor:pointer;">🇯🇵 日本語</li>
-    <li data-lang="korean" style="padding:6px 12px;cursor:pointer;">🇰🇷 한국어</li>
-    <li data-lang="french" style="padding:6px 12px;cursor:pointer;">🇫🇷 Français</li>
-    <li data-lang="german" style="padding:6px 12px;cursor:pointer;">🇩🇪 Deutsch</li>
-    <li data-lang="russian" style="padding:6px 12px;cursor:pointer;">🇷🇺 Русский</li>
-    <li data-lang="spanish" style="padding:6px 12px;cursor:pointer;">🇪🇸 Español</li>
+     <div class="lang-select">
+  <span id="lang-label">🌐 TRANS ▾</span>
+  <ul id="lang-menu">
+    <li data-lang="en">🇺🇸 English</li>
+    <li data-lang="de">🇩🇪 Deutsch</li>
+    <li data-lang="ja">🇯🇵 日本語</li>
   </ul>
 </div>
 
-<script src="https://cdn.staticfile.net/translate.js/3.12.0/translate.js"></script>
+<h1 data-i18n>欢迎来到我的网站</h1>
+<p data-i18n>这是一个示例描述。</p>
+<button data-i18n>点击查看详情</button>
+
 <script>
-  /* ========= 基础配置（只执行一次） ========= */
-  translate.language.setLocal('chinese_simplified');
-  translate.service.use('client.edge');
-  translate.execute();
+const label = document.getElementById('lang-label');
+const menu = document.getElementById('lang-menu');
 
-  const label = document.getElementById('lang-label');
-  const menu = document.getElementById('lang-menu');
+label.onclick = e => {
+  e.stopPropagation();
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+};
+document.onclick = () => menu.style.display = 'none';
 
-  /* ========= 下拉菜单显示/隐藏 ========= */
-  label.addEventListener('click', function (e) {
-    e.stopPropagation();
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-  });
+/* ✅ 模拟翻译接口（后期可替换为 DeepL / GPT） */
+async function fetchTranslation(text, lang) {
+  // 这里只是示例，实际你会调用真实 API
+  const fakeDB = {
+    en: { "欢迎来到我的网站": "Welcome to my website", "这是一个示例描述。": "This is a sample description.", "点击查看详情": "View Details" },
+    de: { "欢迎来到我的网站": "Willkommen auf meiner Website", "这是一个示例描述。": "Dies ist eine Beispielbeschreibung.", "点击查看详情": "Details anzeigen" },
+    ja: { "欢迎来到我的网站": "私のウェブサイトへようこそ", "这是一个示例描述。": "これはサンプルの説明です。", "点击查看详情": "詳細を見る" }
+  };
+  return fakeDB[lang][text] || text;
+}
 
-  document.addEventListener('click', function () {
-    menu.style.display = 'none';
-  });
+/* ✅ 主翻译逻辑 */
+async function translatePage(lang) {
+  localStorage.setItem("site_lang", lang);
+  label.textContent = "🌐 Translating...";
 
-  /* ========= 语言切换（核心：防抖 + 记忆） ========= */
-  let translating = false; // 防重复触发锁
+  const nodes = document.querySelectorAll('[data-i18n]');
 
-  menu.querySelectorAll('li').forEach(function (item) {
-    item.addEventListener('click', function () {
-      if (translating) return; // 防抖：正在翻译则忽略
-      translating = true;
+  for (const node of nodes) {
+    const original = node.textContent.trim();
+    const cacheKey = lang + "|" + original;
 
-      const lang = this.getAttribute('data-lang');
-
-      // 1. 清空旧翻译状态（防止弹回）
-      translate.reset();
-
-      // 2. 切换语言
-      translate.changeLanguage(lang);
-
-      // 3. 记忆语言（刷新后仍生效）
-      localStorage.setItem('site_lang', lang);
-
-      label.innerHTML = '🌐 TRANS ▾';
-      menu.style.display = 'none';
-
-      // 4. 解锁（给翻译留一点时间）
-      setTimeout(() => {
-        translating = false;
-      }, 600);
-    });
-  });
-
-  /* ========= 页面加载时恢复语言 ========= */
-  window.addEventListener('DOMContentLoaded', function () {
-    const savedLang = localStorage.getItem('site_lang');
-    if (savedLang) {
-      translate.reset();
-      translate.changeLanguage(savedLang);
+    let translated = localStorage.getItem(cacheKey);
+    if (!translated) {
+      translated = await fetchTranslation(original, lang);
+      localStorage.setItem(cacheKey, translated);
     }
-  });
+    node.textContent = translated;
+  }
+
+  label.textContent = "🌐 TRANS ▾";
+}
+
+menu.querySelectorAll("li").forEach(li => {
+  li.onclick = () => translatePage(li.dataset.lang);
+});
+
+/* ✅ 页面加载恢复 */
+window.onload = () => {
+  const lang = localStorage.getItem("site_lang");
+  if (lang) translatePage(lang);
+};
 </script>
     </nav>
   </div>
