@@ -337,19 +337,67 @@
       <a href="http://file-change.page.roooooyan.work/">文件类型转换（维护中）</a>
       <a href="sdsz">实验加油-头像制作</a>
       <a href="https://mail.roooooyan.work">Mail</a>
-     <span id="lang-en-icon" style="cursor:pointer;" title="Switch language">🌐 LAN</span>
+     <!-- 语言选择器 -->
+<div class="lang-select" style="position:relative; display:inline-block;">
+  <span id="lang-label" style="cursor:pointer;">🌐 TRANS ▾</span>
+  <ul id="lang-menu"
+      style="
+        position:absolute;
+        right:0;
+        top:100%;
+        display:none;
+        background:#fff;
+        border:1px solid #ddd;
+        list-style:none;
+        padding:4px 0;
+        margin:0;
+        min-width:140px;
+        z-index:9999;
+        font-size:14px;
+      ">
+    <li data-lang="chinese_simplified" style="padding:6px 12px;cursor:pointer;">🇨🇳 中文</li>
+    <li data-lang="english" style="padding:6px 12px;cursor:pointer;">🇺🇸 English</li>
+    <li data-lang="japanese" style="padding:6px 12px;cursor:pointer;">🇯🇵 日本語</li>
+    <li data-lang="korean" style="padding:6px 12px;cursor:pointer;">🇰🇷 한국어</li>
+    <li data-lang="french" style="padding:6px 12px;cursor:pointer;">🇫🇷 Français</li>
+    <li data-lang="german" style="padding:6px 12px;cursor:pointer;">🇩🇪 Deutsch</li>
+    <li data-lang="russian" style="padding:6px 12px;cursor:pointer;">🇷🇺 Русский</li>
+    <li data-lang="spanish" style="padding:6px 12px;cursor:pointer;">🇪🇸 Español</li>
+  </ul>
+</div>
 
-<!-- 引入 translate.js（CDN） -->
+<!-- translate.js -->
 <script src="https://cdn.staticfile.net/translate.js/3.12.0/translate.js"></script>
 <script>
-  // 基础配置：设置原语种为简体中文，使用客户端边缘节点通道（非Google）
+  /* 基础配置 */
   translate.language.setLocal('chinese_simplified');
   translate.service.use('client.edge');
 
-  // 监听 Icon 点击
-  document.getElementById('lang-en-icon').addEventListener('click', function () {
-    translate.changeLanguage('english');
-    translate.execute();
+  const label = document.getElementById('lang-label');
+  const menu = document.getElementById('lang-menu');
+
+  // 显示 / 隐藏菜单
+  label.addEventListener('click', function (e) {
+    e.stopPropagation();
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // 点击空白关闭
+  document.addEventListener('click', function () {
+    menu.style.display = 'none';
+  });
+
+  // 选择语言
+  menu.querySelectorAll('li').forEach(function (item) {
+    item.addEventListener('click', function () {
+      const lang = this.getAttribute('data-lang');
+      translate.changeLanguage(lang);
+      translate.execute();
+
+      // 可选：更新显示文字
+      label.innerHTML = '🌐 TRANS ▾';
+      menu.style.display = 'none';
+    });
   });
 </script>
     </nav>
