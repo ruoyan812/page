@@ -442,6 +442,46 @@
   font-size: 12px;
   color: var(--text-soft);
 }
+ /* ===== 二维码放大遮罩 ===== */
+.qr-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  cursor: zoom-out;
+}
+.qr-zoom-overlay.active {
+  display: flex;
+}
+
+/* ===== 放大后的二维码 ===== */
+#qrZoomImg {
+  max-width: 80vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: qrZoomIn 0.25s ease;
+  background: #fff;
+  padding: 12px;
+}
+
+@keyframes qrZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 </style>
 </head>
 <body>
@@ -514,7 +554,7 @@
     <div class="contact-list">
       <!-- 微信 -->
       <div class="contact-item">
-        <img src="https://thumbnail1.baidupcs.com/thumbnail/423ff451fl894ab5ff8d390b253de9b2?fid=1102372279421-250528-249532274752306&rt=pr&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-06QtlNcH%2bSwUSfR5hEI8c%2bcgdvA%3d&expires=8h&chkbd=0&chkv=0&dp-logid=460681320145471853&dp-callid=0&time=1786089600&size=c1440_u960&quality=90&vuk=1102372279421&ft=image&autopolicy=1" alt="微信二维码">
+        <img class="qrcode-img" src="https://thumbnail1.baidupcs.com/thumbnail/423ff451fl894ab5ff8d390b253de9b2?fid=1102372279421-250528-249532274752306&rt=pr&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-06QtlNcH%2bSwUSfR5hEI8c%2bcgdvA%3d&expires=8h&chkbd=0&chkv=0&dp-logid=460681320145471853&dp-callid=0&time=1786089600&size=c1440_u960&quality=90&vuk=1102372279421&ft=image&autopolicy=1" alt="微信二维码" style="cursor:zoom-in">
         <span>微信</span>
         <code class="copy-target" data-copy="SDSZ-Yan">SDSZ-Yan</code>
         <button class="copy-btn" data-copy="SDSZ-Yan">复制</button>
@@ -522,7 +562,7 @@
 
       <!-- QQ -->
       <div class="contact-item">
-        <img src="https://thumbnail1.baidupcs.com/thumbnail/f155e7495ka055dfb1916d7dbbb6092d?fid=1102372279421-250528-858555322542482&rt=pr&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-JG7bn%2fyre%2bWRXWUO%2fiEHQAEUzcE%3d&expires=8h&chkbd=0&chkv=0&dp-logid=460681320145471853&dp-callid=0&time=1786089600&size=c1440_u960&quality=90&vuk=1102372279421&ft=image&autopolicy=1" alt="QQ二维码">
+        <img class="qrcode-img" src="https://thumbnail1.baidupcs.com/thumbnail/f155e7495ka055dfb1916d7dbbb6092d?fid=1102372279421-250528-858555322542482&rt=pr&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-JG7bn%2fyre%2bWRXWUO%2fiEHQAEUzcE%3d&expires=8h&chkbd=0&chkv=0&dp-logid=460681320145471853&dp-callid=0&time=1786089600&size=c1440_u960&quality=90&vuk=1102372279421&ft=image&autopolicy=1" alt="QQ二维码" style="cursor:zoom-in">
         <span>QQ</span>
         <code class="copy-target" data-copy="2316574928">2316574928</code>
         <button class="copy-btn" data-copy="2316574928">复制</button>
@@ -538,6 +578,10 @@
 
     <p class="modal-tip">点击复制，扫码添加</p>
   </div>
+</div>
+ <!-- 二维码放大弹窗 -->
+<div id="qrZoomModal" class="qr-zoom-overlay">
+  <img id="qrZoomImg" src="" alt="二维码大图">
 </div>
 <footer class="app-footer">
   <p>&copy; 2013 - <span id="year">2026</span> Yanverse</p>
@@ -597,6 +641,29 @@ document.querySelectorAll('.copy-btn').forEach(btn => {
       setTimeout(() => btn.textContent = '复制', 1200);
     });
   });
+});
+</script>
+ <script>
+const qrZoomModal = document.getElementById('qrZoomModal');
+const qrZoomImg = document.getElementById('qrZoomImg');
+
+/* 点击二维码放大 */
+document.querySelectorAll('.qrcode-img').forEach(img => {
+  img.addEventListener('click', () => {
+    qrZoomImg.src = img.src;
+    qrZoomModal.classList.add('active');
+  });
+});
+
+/* 关闭放大 */
+qrZoomModal.addEventListener('click', () => {
+  qrZoomModal.classList.remove('active');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    qrZoomModal.classList.remove('active');
+  }
 });
 </script>
 </body>
