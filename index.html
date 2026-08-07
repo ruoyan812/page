@@ -327,6 +327,121 @@
   #lang-menu { position: absolute; right: 0; top: 110%; display: none; background: #fff; border: 1px solid #ddd; border-radius: 4px; min-width: 150px; z-index: 9999; }
   #lang-menu li { padding: 8px 14px; cursor: pointer; }
   #lang-menu li:hover { background: #f5f5f5; }
+ /* ===== 联系作者按钮 ===== */
+.contact-btn {
+  background: rgba(6,182,212,0.1);
+  border: 1px solid rgba(6,182,212,0.25);
+  color: var(--primary);
+  font-size: 13px;
+  padding: 7px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.contact-btn:hover {
+  background: rgba(6,182,212,0.2);
+}
+
+/* ===== 弹窗遮罩 ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.modal-overlay.active {
+  display: flex;
+}
+
+/* ===== 弹窗主体 ===== */
+.modal-box {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  width: 340px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  animation: fadeUp 0.3s ease;
+}
+.modal-box h3 {
+  margin-bottom: 18px;
+  font-size: 18px;
+  background: linear-gradient(135deg, var(--gradient-1), var(--gradient-3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.modal-close {
+  position: absolute;
+  right: 14px;
+  top: 10px;
+  font-size: 22px;
+  background: none;
+  border: none;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+/* ===== 联系方式 ===== */
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.contact-item img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+}
+.contact-item span {
+  font-size: 13px;
+  color: var(--text-soft);
+  min-width: 42px;
+}
+.copy-target {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 13px;
+  background: rgba(6,182,212,0.08);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.copy-btn {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.copy-btn:hover {
+  background: var(--primary-dark);
+}
+.email-item {
+  justify-content: space-between;
+}
+
+.modal-tip {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-soft);
+}
 </style>
 </head>
 <body>
@@ -340,8 +455,8 @@
     <span class="brand">Yanverse</span>
     <nav class="nav-links">
       <a href="https://yuanbao.tencent.com">元宝</a>
+      <a href="https://blog.roooooyan.work">Blog（试运行）</a>
       <a href="http://file-change.page.roooooyan.work/">文件类型转换（维护中）</a>
-      <a href="sdsz">实验加油-头像制作</a>
       <a href="https://mail.roooooyan.work">Mail</a>
     </nav>
   </div>
@@ -366,9 +481,9 @@
       <span class="icon">🧪</span>
       <span class="label">站内资源搜索</span>
     </a>
-    <a class="quick-link" href="search">
-      <span class="icon">🔍</span>
-      <span class="label">搜索引擎(bing)</span>
+    <a class="quick-link" href="sdsz">
+      <span class="icon">🥳</span>
+      <span class="label">SDSZ Avatar</span>
     </a>
     <a class="quick-link" href="https://game.page.roooooyan.work">
       <span class="icon">🎮</span>
@@ -387,9 +502,43 @@
   <div class="footer-links">
     <a href="info.html">📊 访问信息</a>
     <a href="feedback.html">💬 意见反馈</a>
+    <button id="contactAuthor" class="contact-btn">✉️ 联系作者</button>
   </div>
 </main>
+<!-- 联系作者弹窗 -->
+<div id="contactModal" class="modal-overlay">
+  <div class="modal-box">
+    <button class="modal-close" id="closeModal">&times;</button>
+    <h3>联系作者</h3>
 
+    <div class="contact-list">
+      <!-- 微信 -->
+      <div class="contact-item">
+        <img src="https://thumbnail1.baidupcs.com/thumbnail/423ff451fl894ab5ff8d390b253de9b2?fid=1102372279421-250528-249532274752306&rt=pr&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-06QtlNcH%2bSwUSfR5hEI8c%2bcgdvA%3d&expires=8h&chkbd=0&chkv=0&dp-logid=460681320145471853&dp-callid=0&time=1786089600&size=c1440_u960&quality=90&vuk=1102372279421&ft=image&autopolicy=1" alt="微信二维码">
+        <span>微信</span>
+        <code class="copy-target" data-copy="SDSZ-Yan">SDSZ-Yan</code>
+        <button class="copy-btn" data-copy="SDSZ-Yan">复制</button>
+      </div>
+
+      <!-- QQ -->
+      <div class="contact-item">
+        <img src="https://thumbnail1.baidupcs.com/thumbnail/f155e7495ka055dfb1916d7dbbb6092d?fid=1102372279421-250528-858555322542482&rt=pr&sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-JG7bn%2fyre%2bWRXWUO%2fiEHQAEUzcE%3d&expires=8h&chkbd=0&chkv=0&dp-logid=460681320145471853&dp-callid=0&time=1786089600&size=c1440_u960&quality=90&vuk=1102372279421&ft=image&autopolicy=1" alt="QQ二维码">
+        <span>QQ</span>
+        <code class="copy-target" data-copy="2316574928">2316574928</code>
+        <button class="copy-btn" data-copy="2316574928">复制</button>
+      </div>
+
+      <!-- 邮箱 -->
+      <div class="contact-item email-item">
+        <span>📧 邮箱</span>
+        <code class="copy-target" data-copy="royan.wang812@gmail.com">royan.wang812@gmail.com</code>
+        <button class="copy-btn" data-copy="royan.wang812@gmail.com">复制</button>
+      </div>
+    </div>
+
+    <p class="modal-tip">点击复制，扫码添加</p>
+  </div>
+</div>
 <footer class="app-footer">
   <p>&copy; 2013 - <span id="year">2026</span> Yanverse</p>
 </footer>
@@ -425,5 +574,30 @@
 })();
 </script>
  <!-- 语言切换 Icon -->
+ <script>
+const modal = document.getElementById('contactModal');
+const openBtn = document.getElementById('contactAuthor');
+const closeBtn = document.getElementById('closeModal');
+
+openBtn.addEventListener('click', () => modal.classList.add('active'));
+closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+modal.addEventListener('click', e => {
+  if (e.target === modal) modal.classList.remove('active');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') modal.classList.remove('active');
+});
+
+/* 复制功能 */
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const text = btn.getAttribute('data-copy');
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '已复制';
+      setTimeout(() => btn.textContent = '复制', 1200);
+    });
+  });
+});
+</script>
 </body>
 </html>
